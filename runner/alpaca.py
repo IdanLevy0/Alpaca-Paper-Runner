@@ -53,7 +53,11 @@ class AlpacaClient:
 
     @classmethod
     def from_env(cls):
-        return cls(os.environ["ALPACA_API_KEY"], os.environ["ALPACA_SECRET_KEY"])
+        key = os.environ.get("ALPACA_API_KEY", "").strip()
+        secret = os.environ.get("ALPACA_SECRET_KEY", "").strip()
+        if not key or not secret:
+            raise RuntimeError("ALPACA_API_KEY / ALPACA_SECRET_KEY are missing")
+        return cls(key, secret)
 
     def _req(self, method, path, allow_404=False, **kw):
         r = self.s.request(method, self.url + path, timeout=TIMEOUT, **kw)

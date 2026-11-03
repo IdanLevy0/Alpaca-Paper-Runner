@@ -154,6 +154,19 @@ def step(client, now, st, live):
     return notes
 
 
+def safe_error(e):
+    """Error text for the public log: secrets removed, and header errors reduced to their type
+    (requests puts the header value, i.e. the key, in those messages)."""
+    msg = str(e)
+    if "header" in msg.lower():
+        return f"{type(e).__name__}: bad request header (check the Alpaca secrets for spaces or line breaks)"
+    for name in ("ALPACA_API_KEY", "ALPACA_SECRET_KEY"):
+        v = os.environ.get(name, "").strip()
+        if len(v) >= 6:
+            msg = msg.replace(v, "[redacted]")
+    return f"{type(e).__name__}: {msg[:300]}"
+
+
 def trading_live():
     """Orders only when TRADING_ENABLED=true AND no state/KILL file."""
     return os.environ.get("TRADING_ENABLED", "").lower() == "true" and not os.path.exists(KILL_FILE)
@@ -170,8 +183,8 @@ def main():
         save_state(st)
         log_run(f"{iso(now)} {mode} {config.STRATEGY}: " + "; ".join(notes))
     except Exception as e:  # log, then fail the job so GitHub shows a red run
-        log_run(f"{iso(now)} {mode} ERROR {type(e).__name__}: {e}")
-        raise
+        log_run(f"{iso(now)} {mode} ERROR {safe_error(e)}")
+        sys.exit(1)   # no traceback: it could print request details to the public Actions log
 
 
 if __name__ == "__main__":
