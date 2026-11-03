@@ -22,3 +22,4 @@ Automated paper trading of BTC/USD on Alpaca from GitHub Actions, built from the
   stop-limit has a 1% cushion and may not fill in a crash gap; GitHub can delay scheduled runs by minutes.
 - Wrote SETUP.md and RESEARCH_LOOP_PROMPT.md (new long-only, Alpaca-fee loop prompt).
 - Idan: reuse the existing paper account (ESHA bot keys), ESHA bot scrapped. No old GitHub repo exists; Idan creates an empty repo, Claude pushes, Idan adds the secrets himself.
+- Local git repo created (branch main, first commit 0ee9b39). Waiting on Idan: empty public GitHub repo alpaca-paper-runner, secrets, then the backtest workflow.
