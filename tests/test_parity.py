@@ -123,3 +123,21 @@ def test_real_strategies_run(name):
     trades = engine.run(bars, STRATEGIES[name])
     for t in trades:
         assert t["reason"] in ("stop", "target", "time")
+
+
+def test_trend_strategy_matches_backtest(tmp_path, monkeypatch):
+    """breakout_trend: trailing stop raised on the exchange each candle, exit on a close below EMA50."""
+    for name in ("STATE_FILE", "TRADES_FILE", "RUNS_FILE"):
+        monkeypatch.setattr(R, name, str(tmp_path / name))
+    monkeypatch.setattr(R, "STATE_DIR", str(tmp_path))
+    monkeypatch.setattr(config, "STRATEGY", "breakout_trend")
+    monkeypatch.setattr(config, "MAX_ENTRIES_PER_DAY", 99)
+    bars = make_bars(LOOKBACK + 1500, seed=3)
+    bt = engine.run(bars, STRATEGIES["breakout_trend"], fee=0, slippage=0)
+    live = replay(bars)
+    assert len(bt) >= 10
+    assert {t["reason"] for t in bt} >= {"stop", "signal"}
+    assert len(live) == len(bt)
+    for a, b in zip(bt, live):
+        assert (a["entry_time"], a["exit_time"], a["reason"]) == (b["entry_bar"], b["exit_bar"], b["reason"])
+        assert a["entry"] == pytest.approx(b["entry"])

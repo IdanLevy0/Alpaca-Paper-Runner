@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from runner import config                                  # noqa: E402
-from runner.strategies import STRATEGIES, LOOKBACK         # noqa: E402
+from runner.strategies import STRATEGIES, MANAGERS, LOOKBACK  # noqa: E402
 
 STATE_DIR = os.path.join(ROOT, "state")
 STATE_FILE = os.path.join(STATE_DIR, "state.json")
@@ -72,7 +72,8 @@ def close_trade(st, exit_px, reason, now, notes):
                "exit_time": iso(now), "exit": round(exit_px, 2), "reason": reason, "qty": st["qty"],
                "ret_pct": round(ret, 3)})
     notes.append(f"EXIT {reason} @ {exit_px:.2f} ({ret:+.2f}% before fees)")
-    for k in ("entry_time", "entry", "stop", "target", "max_bars", "qty", "stop_order_id", "entry_bar_t", "strategy"):
+    for k in ("entry_time", "entry", "stop", "target", "max_bars", "qty", "stop_order_id", "entry_bar_t", "strategy",
+              "peak_close", "last_manage_bar"):
         st.pop(k, None)
     st["in_trade"] = False
 
@@ -100,23 +101,53 @@ def step(client, now, st, live):
                 o = client.sell_stop(sym, pos, st["stop"], f"stop-{st['entry_bar_t']}")
                 st["stop_order_id"] = o["id"]
                 notes.append(f"placed stop {st['stop']:.2f}")
-            since = st.get("last_check") or st["entry_time"]
-            # 5-minute bars since the last check, including the one still forming: any touch of the target counts
-            recent = [b for b in client.bars(sym, "5Min", since) if ts(b["t"]) <= now]
-            hit_target = any(b["h"] >= st["target"] for b in recent)
-            held = sum(1 for b in bars if b["t"] >= st["entry_bar_t"])
-            reason = "target" if hit_target else ("time" if held >= st["max_bars"] else None)
-            if reason:
+            def exit_now(reason, fallback_px):
                 if live:
                     if st.get("stop_order_id"):
                         client.cancel(st["stop_order_id"])
                     o = client.wait_filled(client.sell_market(sym, pos, f"{reason}-{st['entry_bar_t']}")["id"])
-                    px = float(o.get("filled_avg_price") or bars[-1]["c"])
+                    px = float(o.get("filled_avg_price") or fallback_px)
                 else:
-                    px = st["target"] if reason == "target" else bars[-1]["c"]
+                    px = fallback_px
                 close_trade(st, px, reason, now, notes)
-            else:
-                notes.append(f"holding, {held}/{st['max_bars']} bars, stop {st['stop']:.2f} target {st['target']:.2f}")
+
+            # 1) fixed target, checked on 5-minute bars since the last pass (only strategies that have one)
+            if st.get("target"):
+                since = st.get("last_check") or st["entry_time"]
+                recent = [b for b in client.bars(sym, "5Min", since) if ts(b["t"]) <= now]
+                if any(b["h"] >= st["target"] for b in recent):
+                    exit_now("target", st["target"])
+                    st["last_check"] = iso(now)
+                    return notes
+            # 2) at each newly closed 4h candle: manager (trail / signal exit), then time exit
+            last = bars[-1]["t"]
+            if last >= st["entry_bar_t"] and st.get("last_manage_bar") != last:
+                st["last_manage_bar"] = last
+                mgr = MANAGERS.get(st["strategy"])
+                if mgr:
+                    view = {"entry": st["entry"], "stop": st["stop"], "peak_close": st.get("peak_close", st["entry"])}
+                    m = mgr(bars, view)
+                    st["peak_close"] = view["peak_close"]
+                    if m["exit"]:
+                        exit_now("signal", bars[-1]["c"])
+                        st["last_check"] = iso(now)
+                        return notes
+                    if m["stop"] > st["stop"]:
+                        st["stop"] = m["stop"]
+                        if live:
+                            if st.get("stop_order_id"):
+                                client.cancel(st["stop_order_id"])
+                            o = client.sell_stop(sym, pos, st["stop"], f"stop-{st['entry_bar_t']}-{last}")
+                            st["stop_order_id"] = o["id"]
+                        notes.append(f"stop raised to {st['stop']:.2f}")
+                held = sum(1 for b in bars if b["t"] >= st["entry_bar_t"])
+                if st.get("max_bars") and held >= st["max_bars"]:
+                    exit_now("time", bars[-1]["c"])
+                    st["last_check"] = iso(now)
+                    return notes
+            if st["in_trade"]:
+                tgt = f" target {st['target']:.2f}" if st.get("target") else ""
+                notes.append(f"holding, stop {st['stop']:.2f}{tgt}")
         st["last_check"] = iso(now)
         return notes
 
@@ -143,11 +174,13 @@ def step(client, now, st, live):
         entry, qty = bars[-1]["c"], round(notional / bars[-1]["c"], 6)
     entry_bar = ts(last) + timedelta(seconds=config.BAR_SECONDS)
     st.update({"in_trade": True, "strategy": name, "entry_time": iso(now), "entry": entry, "qty": qty,
-               "stop": entry - sig["stop_dist"], "target": entry + sig["target_dist"],
-               "max_bars": sig["max_bars"], "entry_bar_t": iso(entry_bar), "stop_order_id": None,
+               "stop": entry - sig["stop_dist"],
+               "target": entry + sig["target_dist"] if sig.get("target_dist") else None,
+               "max_bars": sig.get("max_bars"), "peak_close": entry, "entry_bar_t": iso(entry_bar), "stop_order_id": None,
                "last_check": iso(now)})
     st["entries"] = {day: st["entries"].get(day, 0) + 1}
-    notes.append(f"ENTRY {name} @ {entry:.2f}, qty {qty}, stop {st['stop']:.2f}, target {st['target']:.2f}")
+    notes.append(f"ENTRY {name} @ {entry:.2f}, qty {qty}, stop {st['stop']:.2f}"
+                 + (f", target {st['target']:.2f}" if st["target"] else ""))
     if live:
         o = client.sell_stop(sym, qty, st["stop"], f"stop-{st['entry_bar_t']}")
         st["stop_order_id"] = o["id"]

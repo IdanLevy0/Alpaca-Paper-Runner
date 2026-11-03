@@ -58,7 +58,37 @@ def thrust_long(bars):
     return None
 
 
+def breakout_trend(bars):
+    """Rebuilt from the Trader.dev S38/S62 family (R2-09): Donchian-20 breakout in an uptrend, let winners run.
+    Entry: close > highest high of the prior 20 candles AND close > SMA200.
+    Initial stop 2 ATR below entry. No fixed target or time limit: exits come from manage_breakout_trend."""
+    if len(bars) < WARMUP:
+        return None
+    closes, a = _prep(bars)
+    sma200 = sum(closes[-200:]) / 200
+    hh = ind.highest([b["h"] for b in bars], 20)[-1]
+    if None in (hh, a[-1]):
+        return None
+    if closes[-1] > hh and closes[-1] > sma200:
+        return {"stop_dist": 2.0 * a[-1], "target_dist": None, "max_bars": None}
+    return None
+
+
+def manage_breakout_trend(bars, trade):
+    """Called at each candle close while in the trade. Stop trails 3 ATR below the highest close since entry
+    (never moves down). Exit at the close if it falls below EMA50."""
+    closes, a = _prep(bars)
+    e50 = ind.ema(closes, 50)[-1]
+    trade["peak_close"] = max(trade.get("peak_close", trade["entry"]), closes[-1])
+    new_stop = max(trade["stop"], trade["peak_close"] - 3.0 * a[-1])
+    return {"stop": new_stop, "exit": e50 is not None and closes[-1] < e50}
+
+
+# Strategies with candle-close exit management. Others use fixed stop/target/time only.
+MANAGERS = {"breakout_trend": manage_breakout_trend}
+
 STRATEGIES = {
+    "breakout_trend": breakout_trend,
     "trend_pullback": trend_pullback,
     "donchian_breakout": donchian_breakout,
     "thrust_long": thrust_long,

@@ -14,7 +14,7 @@ from runner.strategies import STRATEGIES               # noqa: E402
 from backtest.engine import run, summarize, FEE        # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(HERE, "bars_4h.json")
+SYMBOLS = ["BTC/USD", "ETH/USD"]
 YEARS = [2021, 2022, 2023, 2024, 2025, 2026]
 
 # Pass gate, fixed before looking at results
@@ -23,15 +23,16 @@ GATE_MIN_PF = 1.2
 GATE_MIN_TRADES_PER_YEAR = 25
 
 
-def load_bars(refresh=False):
-    if os.path.exists(CACHE) and not refresh:
-        with open(CACHE) as f:
+def load_bars(symbol, refresh=False):
+    cache = os.path.join(HERE, "bars_4h_" + symbol.replace("/", "") + ".json")
+    if os.path.exists(cache) and not refresh:
+        with open(cache) as f:
             return json.load(f)
-    bars = fetch_crypto_bars("BTC/USD", "4Hour", "2020-06-01T00:00:00Z",
+    bars = fetch_crypto_bars(symbol, "4Hour", "2020-06-01T00:00:00Z",
                              key=os.environ.get("ALPACA_API_KEY"), secret=os.environ.get("ALPACA_SECRET_KEY"))
     now = datetime.now(timezone.utc).timestamp()
     bars = [b for b in bars if datetime.fromisoformat(b["t"].replace("Z", "+00:00")).timestamp() + 4 * 3600 <= now]
-    with open(CACHE, "w") as f:
+    with open(cache, "w") as f:
         json.dump(bars, f)
     return bars
 
@@ -58,12 +59,10 @@ def buy_hold(bars):
     return res
 
 
-def report(bars, res):
+def report(symbol, bars, res):
     bh = buy_hold(bars)
-    L = ["# Backtest result: BTC/USD 4h, long only, Alpaca data", "",
-         f"Bars: {bars[0]['t']} to {bars[-1]['t']} ({len(bars)} bars). Fee {FEE*100:.2f}% per side + 0.05% slippage.",
-         f"Gate: profitable in >= {GATE_MIN_YEARS_PROFITABLE} of {len(YEARS)} years, PF >= {GATE_MIN_PF}, "
-         f">= {GATE_MIN_TRADES_PER_YEAR} trades per year on average.", "",
+    L = [f"## {symbol} 4h, long only, Alpaca data", "",
+         f"Bars: {bars[0]['t']} to {bars[-1]['t']} ({len(bars)} bars).", "",
          "| Strategy | " + " | ".join(str(y) for y in YEARS) + " | All PF | Trades/yr | Max DD | Gate |",
          "|---|" + "---|" * len(YEARS) + "---|---|---|---|"]
     for name, r in res.items():
@@ -76,8 +75,13 @@ def report(bars, res):
 
 
 if __name__ == "__main__":
-    bars = load_bars(refresh="--refresh" in sys.argv)
-    text = report(bars, evaluate(bars))
+    parts = ["# Backtest result", "",
+             f"Fee {FEE*100:.2f}% per side + 0.05% slippage. Gate: profitable in >= {GATE_MIN_YEARS_PROFITABLE} of "
+             f"{len(YEARS)} years, PF >= {GATE_MIN_PF}, >= {GATE_MIN_TRADES_PER_YEAR} trades per year on average.", ""]
+    for sym in SYMBOLS:
+        bars = load_bars(sym, refresh="--refresh" in sys.argv)
+        parts += [report(sym, bars, evaluate(bars)), ""]
+    text = "\n".join(parts)
     print(text)
     with open(os.path.join(os.path.dirname(HERE), "BACKTEST_RESULT.md"), "w") as f:
         f.write(text + "\n")
