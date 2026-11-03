@@ -23,3 +23,4 @@ Automated paper trading of BTC/USD on Alpaca from GitHub Actions, built from the
 - Wrote SETUP.md and RESEARCH_LOOP_PROMPT.md (new long-only, Alpaca-fee loop prompt).
 - Idan: reuse the existing paper account (ESHA bot keys), ESHA bot scrapped. No old GitHub repo exists; Idan creates an empty repo, Claude pushes, Idan adds the secrets himself.
 - Local git repo created (branch main, first commit 0ee9b39). Waiting on Idan: empty public GitHub repo alpaca-paper-runner, secrets, then the backtest workflow.
+- Real-data backtest (GitHub workflow, Alpaca BTC/USD 4h 2021 to 2026-11-03): all 3 fail the gate. trend_pullback PF 0.92 (2/6 years up, DD 58.5%), donchian_breakout PF 0.76 (0/6), thrust_long PF 0.61 (0/6). Fees ~18%/yr drag at ~30 trades/yr. Runner stays DRY with trend_pullback as a plumbing test; real candidates come from the research loop. Waiting on the text of the run's warning + notice.
