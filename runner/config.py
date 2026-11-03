@@ -1,5 +1,5 @@
 """Settings for the paper runner. Change STRATEGY after a strategy passes the backtest gate."""
-STRATEGY = "trend_pullback"     # one of runner.strategies.STRATEGIES
+STRATEGY = "breakout_trend"     # paper forward test only: FAILED the gate (BTC PF 1.15, 2/6 years)
 SYMBOL = "BTC/USD"
 TIMEFRAME = "4Hour"
 BAR_SECONDS = 4 * 3600
