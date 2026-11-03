@@ -1,0 +1,22 @@
+name: backtest
+on:
+  workflow_dispatch: {}     # run by hand from the Actions tab
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m backtest.run_backtest --refresh
+      - run: |
+          git config user.name "paper-runner"
+          git config user.email "paper-runner@users.noreply.github.com"
+          git add BACKTEST_RESULT.md
+          git diff --cached --quiet || (git commit -m "backtest result" -q && git pull --rebase -q && git push -q)
