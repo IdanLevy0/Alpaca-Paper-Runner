@@ -157,11 +157,16 @@ def step(client, now, st, live):
     last = bars[-1]["t"]
     if st.get("last_signal_bar") == last:
         return [f"flat, bar {last} already checked"]
+    prev = st.get("last_signal_bar")
+    if prev:
+        missed = sum(1 for b in bars if prev < b["t"] < last)
+        if missed:
+            notes.append(f"MISSED {missed} candle(s) since {prev} (runner did not run in time)")
     st["last_signal_bar"] = last
     name = config.STRATEGY
     sig = STRATEGIES[name](bars)
     if not sig:
-        return [f"flat, no signal on {last}"]
+        return notes + [f"flat, no signal on {last}"]
 
     day = iso(now)[:10]
     if st["entries"].get(day, 0) >= config.MAX_ENTRIES_PER_DAY:

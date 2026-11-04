@@ -39,3 +39,15 @@ def test_same_candle_checked_once(isolated):
     if not st["in_trade"]:
         notes = R.step(fake, fake.now() + timedelta(minutes=5), st, live=False)
         assert "already checked" in notes[0]
+
+
+def test_missed_candles_are_logged(isolated):
+    bars = make_bars(LOOKBACK + 50)
+    fake, st = FakeAlpaca(bars), {"in_trade": False, "last_signal_bar": None, "entries": {}}
+    fake.advance(len(bars) - 5)
+    R.step(fake, fake.now(), st, live=False)
+    if st["in_trade"]:
+        return
+    fake.advance(len(bars) - 1)
+    notes = R.step(fake, fake.now(), st, live=False)
+    assert any("MISSED 3 candle" in n for n in notes)
