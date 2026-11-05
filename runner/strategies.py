@@ -58,30 +58,37 @@ def thrust_long(bars):
     return None
 
 
-def breakout_trend(bars):
-    """Rebuilt from the Trader.dev S38/S62 family (R2-09): Donchian-20 breakout in an uptrend, let winners run.
-    Entry: close > highest high of the prior 20 candles AND close > SMA200.
-    Initial stop 2 ATR below entry. No fixed target or time limit: exits come from manage_breakout_trend."""
-    if len(bars) < WARMUP:
+def make_breakout_trend(lookback=20, trend_len=200, stop_atr=2.0, trail_atr=3.0, exit_ema=50):
+    """Breakout-trend family (rebuilt from the Trader.dev S38/S62 family, R2-09).
+    Entry: close > highest high of the prior `lookback` candles AND close > SMA(`trend_len`).
+    Initial stop `stop_atr` ATR below entry. Each candle close: stop trails `trail_atr` ATR below the highest close
+    since entry (never down); exit at the close if it falls below EMA(`exit_ema`). No target, no time limit.
+    Returns (signal_fn, manage_fn)."""
+
+    def signal(bars):
+        if len(bars) < max(WARMUP, trend_len + 5):
+            return None
+        closes, a = _prep(bars)
+        sma = sum(closes[-trend_len:]) / trend_len
+        hh = ind.highest([b["h"] for b in bars], lookback)[-1]
+        if None in (hh, a[-1]):
+            return None
+        if closes[-1] > hh and closes[-1] > sma:
+            return {"stop_dist": stop_atr * a[-1], "target_dist": None, "max_bars": None}
         return None
-    closes, a = _prep(bars)
-    sma200 = sum(closes[-200:]) / 200
-    hh = ind.highest([b["h"] for b in bars], 20)[-1]
-    if None in (hh, a[-1]):
-        return None
-    if closes[-1] > hh and closes[-1] > sma200:
-        return {"stop_dist": 2.0 * a[-1], "target_dist": None, "max_bars": None}
-    return None
+
+    def manage(bars, trade):
+        closes, a = _prep(bars)
+        e = ind.ema(closes, exit_ema)[-1]
+        trade["peak_close"] = max(trade.get("peak_close", trade["entry"]), closes[-1])
+        new_stop = max(trade["stop"], trade["peak_close"] - trail_atr * a[-1])
+        return {"stop": new_stop, "exit": e is not None and closes[-1] < e}
+
+    return signal, manage
 
 
-def manage_breakout_trend(bars, trade):
-    """Called at each candle close while in the trade. Stop trails 3 ATR below the highest close since entry
-    (never moves down). Exit at the close if it falls below EMA50."""
-    closes, a = _prep(bars)
-    e50 = ind.ema(closes, 50)[-1]
-    trade["peak_close"] = max(trade.get("peak_close", trade["entry"]), closes[-1])
-    new_stop = max(trade["stop"], trade["peak_close"] - 3.0 * a[-1])
-    return {"stop": new_stop, "exit": e50 is not None and closes[-1] < e50}
+breakout_trend, manage_breakout_trend = make_breakout_trend()
+breakout_trend.__name__ = "breakout_trend"
 
 
 def explain_breakout_trend(bars):

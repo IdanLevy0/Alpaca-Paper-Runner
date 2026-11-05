@@ -15,7 +15,8 @@ FEE = 0.0025       # Alpaca crypto taker, tier 1 (0.25% per side)
 SLIPPAGE = 0.0005  # 0.05% assumed on market entries and stop/close exits
 
 
-def run(bars, signal_fn, fee=FEE, slippage=SLIPPAGE, manager=None):
+def run(bars, signal_fn, fee=FEE, slippage=SLIPPAGE, manager=None, trace=False):
+    """trace=True adds per-trade 'stops' [(bar time, stop in force that bar)] and 'target' for the replay viewer."""
     if manager is None:
         manager = next((m for k, m in MANAGERS.items() if getattr(signal_fn, "__name__", "") == k), None)
     trades, i, n = [], 0, len(bars)
@@ -30,9 +31,12 @@ def run(bars, signal_fn, fee=FEE, slippage=SLIPPAGE, manager=None):
         target = entry + sig["target_dist"] if sig.get("target_dist") else None
         max_bars = sig.get("max_bars")
         exit_px = reason = None
+        stops = []
         j = e
         while j < n:
             b = bars[j]
+            if trace:
+                stops.append((b["t"], trade["stop"]))
             if b["l"] <= trade["stop"]:
                 exit_px, reason = min(trade["stop"], b["o"]) * (1 - slippage), "stop"
                 break
@@ -52,8 +56,11 @@ def run(bars, signal_fn, fee=FEE, slippage=SLIPPAGE, manager=None):
         if exit_px is None:      # ran out of data with the trade still open: skip it
             break
         ret = (exit_px * (1 - fee)) / (entry * (1 + fee)) - 1
-        trades.append({"entry_time": bars[e]["t"], "exit_time": bars[j]["t"], "entry": entry,
-                       "exit": exit_px, "reason": reason, "ret": ret})
+        t = {"entry_time": bars[e]["t"], "exit_time": bars[j]["t"], "entry": entry,
+             "exit": exit_px, "reason": reason, "ret": ret}
+        if trace:
+            t.update(stops=stops, target=target, initial_stop=stops[0][1] if stops else trade["stop"])
+        trades.append(t)
         i = j + 1
     return trades
 

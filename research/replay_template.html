@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy Replay</title>
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root{--bg:#f7f6f3;--panel:#ffffff;--ink:#1d1d1b;--muted:#6b6a66;--line:#e4e2dc;--accent:#2f6fde;--up:#1f9d6b;--down:#d1493f;--warn:#c98a12;--grid:#efede8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141413;--panel:#1d1d1b;--ink:#ecebe6;--muted:#9a988f;--line:#2e2d2a;--accent:#6ea0ff;--up:#3cc28b;--down:#ef6b61;--warn:#e3a93a;--grid:#262523}}
+:root[data-theme="dark"]{--bg:#141413;--panel:#1d1d1b;--ink:#ecebe6;--muted:#9a988f;--line:#2e2d2a;--accent:#6ea0ff;--up:#3cc28b;--down:#ef6b61;--warn:#e3a93a;--grid:#262523}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+h1{font-size:20px;margin:0}
+.sub{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px}
+.tabs button,.nav button{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font:inherit}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{color:var(--muted);font-size:12px}.stat .v{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.verdict{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px}
+.verdict ul{margin:0;padding-left:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
+.panel h2{font-size:14px;margin:2px 4px 8px}
+#price{height:440px}#equity{height:220px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:6px 4px 0}
+.legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:middle;border-radius:2px}
+.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.card{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.card{grid-template-columns:1fr}#price{height:340px}}
+.card h3{font-size:12px;color:var(--muted);margin:0 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.res{font-size:16px;font-weight:600}
+.pos{color:var(--up)}.neg{color:var(--down)}
+.tablewrap{max-height:320px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--panel);color:var(--muted);font-weight:500}
+tr.row{cursor:pointer}tr.row:hover,tr.row.sel{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.empty{color:var(--muted);padding:30px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div><h1>Strategy replay</h1><div class="sub" id="sub"></div></div>
+  <div class="tabs" id="tabs" role="group" aria-label="Coin"></div>
+</header>
+<div class="stats" id="stats"></div>
+<div class="verdict"><ul id="verdict"></ul></div>
+<div class="panel">
+  <div class="nav">
+    <button id="prev" aria-label="Previous trade">&larr; Prev</button>
+    <button id="next" aria-label="Next trade">Next &rarr;</button>
+    <span class="sub" id="pos"></span>
+    <button id="all">Show all</button>
+  </div>
+  <div class="card" id="card"></div>
+</div>
+<div class="panel"><h2>Price, trades and stop</h2><div id="price"></div>
+  <div class="legend"><span><i style="background:var(--up)"></i>buy</span><span><i style="background:var(--warn)"></i>stop loss of the selected trade</span><span><i style="background:var(--down)"></i>sell</span></div></div>
+<div class="panel"><h2>Growth of $1 (log scale)</h2><div id="equity"></div>
+  <div class="legend"><span><i style="background:var(--accent)"></i>strategy</span><span><i style="background:var(--muted)"></i>buy and hold</span><span><i style="background:var(--warn)"></i>200-day average filter</span></div></div>
+<div class="panel"><h2>All trades</h2><div class="tablewrap"><table><thead><tr><th>#</th><th>Bought</th><th>Sold</th><th>Days</th><th>Why sold</th><th>Result</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</main>
+<script>
+const DATA = /*__DATA__*/null;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (x, d = 0) => x == null ? "n/a" : x.toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+const day = s => new Date(s * 1000).toISOString().slice(0, 16).replace("T", " ");
+const P = DATA ? DATA.params : {};
+let coin, cur = -1, price, equity, candles, stopLine;
+
+function chartOpts(el, h) {
+  return {width: el.clientWidth, height: h, layout: {background: {color: css("--panel")}, textColor: css("--muted")},
+    grid: {vertLines: {color: css("--grid")}, horzLines: {color: css("--grid")}},
+    rightPriceScale: {borderColor: css("--line")}, timeScale: {borderColor: css("--line"), timeVisible: true}};
+}
+
+function whyIn(t) {
+  const w = t.why_in;
+  return `The 4h candle closed at ${fmt(w.close)}, above the highest high of the previous ${P.lookback} candles (${fmt(w.high_n)}) ` +
+         `and above the ${P.trend_len}-candle average (${fmt(w.sma)}). Bought at the next open, ${fmt(t.entry)}, ` +
+         `with a stop ${P.stop_atr} ATR below at ${fmt(t.stops.length ? t.stops[0][1] : null)}.`;
+}
+function whyOut(t) {
+  const w = t.why_out;
+  if (t.reason === "stop") {
+    const first = t.stops.length ? t.stops[0][1] : null, moved = w.stop > first + 0.01;
+    return `Price fell to the stop at ${fmt(w.stop)}` + (moved ? `, which had trailed up from ${fmt(first)} as price rose.` : ", the original stop.");
+  }
+  return `The candle closed at ${fmt(w.close)}, below the ${P.exit_ema} EMA (${fmt(w.ema)}), so it sold at that close.`;
+}
+
+function showTrade(i) {
+  const d = DATA.coins[coin], t = d.trades[i];
+  cur = i;
+  document.getElementById("pos").textContent = `Trade ${i + 1} of ${d.trades.length}`;
+  const cls = t.ret >= 0 ? "pos" : "neg";
+  document.getElementById("card").innerHTML =
+    `<div><h3>Why it bought · ${day(t.in)}</h3><p>${whyIn(t)}</p></div>` +
+    `<div><h3>Why it sold · ${day(t.out)}</h3><p>${whyOut(t)}</p>` +
+    `<p class="res ${cls}">${t.ret >= 0 ? "+" : ""}${t.ret.toFixed(2)}% after fees over ${(t.bars * 4 / 24).toFixed(1)} days</p></div>`;
+  const pts = t.stops.map(([tm, v]) => ({time: tm, value: v}));
+  if (!pts.length || pts[pts.length - 1].time !== t.out) pts.push({time: t.out, value: t.why_out.stop});
+  stopLine.setData(pts);
+  const pad = Math.max(30, t.bars) * 14400;
+  price.timeScale().setVisibleRange({from: t.in - pad, to: t.out + pad});
+  document.querySelectorAll("tr.row").forEach((r, k) => r.classList.toggle("sel", k === i));
+  const row = document.querySelectorAll("tr.row")[i], wrap = document.querySelector(".tablewrap");
+  if (row) wrap.scrollTop = row.offsetTop - wrap.clientHeight / 2;
+}
+
+function render(sym) {
+  coin = sym; cur = -1;
+  const d = DATA.coins[sym], s = d.summary;
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === sym));
+  const stat = (k, v, c = "") => `<div class="stat"><div class="k">${k}</div><div class="v ${c}">${v}</div></div>`;
+  document.getElementById("stats").innerHTML =
+    stat("Strategy per year", `${s.cagr >= 0 ? "+" : ""}${s.cagr}%`, s.cagr >= 0 ? "pos" : "neg") +
+    stat("Buy and hold per year", `${s.bh_cagr >= 0 ? "+" : ""}${s.bh_cagr}%`) +
+    stat("Worst drop", `${s.dd}%`) + stat("Profit factor", s.pf) + stat("Trades", s.trades) +
+    stat("Win rate", `${s.win}%`) + stat("Luck p-value", s.p == null ? "n/a" : s.p.toFixed(2));
+  document.getElementById("verdict").innerHTML = s.verdict.map(v => `<li>${v}</li>`).join("");
+  document.getElementById("card").innerHTML = `<div class="empty">Pick a trade below, or press Next to step through them in order.</div>`;
+  document.getElementById("pos").textContent = "";
+
+  const pe = document.getElementById("price"), ee = document.getElementById("equity");
+  pe.innerHTML = ""; ee.innerHTML = "";
+  price = LightweightCharts.createChart(pe, chartOpts(pe, pe.clientHeight));
+  candles = price.addCandlestickSeries({upColor: css("--up"), downColor: css("--down"), borderVisible: false,
+    wickUpColor: css("--up"), wickDownColor: css("--down")});
+  candles.setData(d.candles.map(c => ({time: c[0], open: c[1], high: c[2], low: c[3], close: c[4]})));
+  stopLine = price.addLineSeries({color: css("--warn"), lineWidth: 2, lineType: 1, priceLineVisible: false, lastValueVisible: false});
+  stopLine.setData([]);
+  const marks = [];
+  d.trades.forEach((t, k) => {
+    marks.push({time: t.in, position: "belowBar", color: css("--up"), shape: "arrowUp", text: `B${k + 1}`});
+    marks.push({time: t.out, position: "aboveBar", color: t.ret >= 0 ? css("--up") : css("--down"), shape: "arrowDown",
+      text: `${t.ret >= 0 ? "+" : ""}${t.ret.toFixed(1)}%`});
+  });
+  marks.sort((a, b) => a.time - b.time);
+  candles.setMarkers(marks);
+
+  equity = LightweightCharts.createChart(ee, Object.assign(chartOpts(ee, ee.clientHeight), {rightPriceScale: {mode: 1, borderColor: css("--line")}}));
+  const line = (data, color, w) => { const s = equity.addLineSeries({color, lineWidth: w, priceLineVisible: false, lastValueVisible: false});
+    s.setData(data.map(p => ({time: p[0], value: p[1]}))); };
+  line(d.bh, css("--muted"), 1); line(d.filter, css("--warn"), 1); line(d.equity, css("--accent"), 2);
+  equity.timeScale().fitContent(); price.timeScale().fitContent();
+
+  document.getElementById("rows").innerHTML = d.trades.map((t, k) =>
+    `<tr class="row" data-k="${k}"><td>${k + 1}</td><td>${day(t.in)}</td><td>${day(t.out)}</td><td>${(t.bars * 4 / 24).toFixed(1)}</td>` +
+    `<td>${t.reason === "stop" ? "stop loss" : `close below EMA${P.exit_ema}`}</td>` +
+    `<td class="${t.ret >= 0 ? "pos" : "neg"}">${t.ret >= 0 ? "+" : ""}${t.ret.toFixed(2)}%</td></tr>`).join("");
+  document.querySelectorAll("tr.row").forEach(r => r.addEventListener("click", () => showTrade(+r.dataset.k)));
+}
+
+if (!DATA || !Object.keys(DATA.coins).length) {
+  document.querySelector("main").innerHTML = `<div class="empty">No data yet. Run the research workflow on GitHub, then git pull.</div>`;
+} else {
+  document.getElementById("sub").textContent =
+    `breakout_trend · ${P.lookback}-candle breakout above SMA${P.trend_len} · stop ${P.stop_atr} ATR · trail ${P.trail_atr} ATR · exit below EMA${P.exit_ema} · ${(DATA.fee * 100).toFixed(2)}% fee per side`;
+  const tabs = document.getElementById("tabs");
+  for (const c of Object.keys(DATA.coins)) {
+    const b = document.createElement("button"); b.textContent = c; b.dataset.c = c;
+    b.addEventListener("click", () => render(c)); tabs.appendChild(b);
+  }
+  document.getElementById("prev").addEventListener("click", () => { const n = DATA.coins[coin].trades.length; if (n) showTrade(cur <= 0 ? n - 1 : cur - 1); });
+  document.getElementById("next").addEventListener("click", () => { const n = DATA.coins[coin].trades.length; if (n) showTrade(cur >= n - 1 ? 0 : cur + 1); });
+  document.getElementById("all").addEventListener("click", () => { stopLine.setData([]); price.timeScale().fitContent(); });
+  window.addEventListener("resize", () => {
+    for (const [ch, id] of [[price, "price"], [equity, "equity"]]) { const el = document.getElementById(id); ch && ch.resize(el.clientWidth, el.clientHeight); }
+  });
+  render(Object.keys(DATA.coins)[0]);
+}
+</script>
+</body>
+</html>
