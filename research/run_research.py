@@ -229,18 +229,25 @@ def write_replay(results, path):
 
 
 def main(load):
-    results = []
+    results, skipped = [], []
     for sym in SYMBOLS:
         try:
             bars = load(sym)
         except Exception as e:  # e.g. a coin with no data
-            print(f"skipping {sym}: {type(e).__name__}")
+            msg = "" if "header" in str(e).lower() else str(e)[:120]
+            for v in (os.environ.get("ALPACA_API_KEY", "").strip(), os.environ.get("ALPACA_SECRET_KEY", "").strip()):
+                if len(v) >= 6:
+                    msg = msg.replace(v, "[redacted]")
+            skipped.append(f"{sym}: could not load data ({type(e).__name__}{': ' + msg if msg else ''})")
             continue
         if len(bars) < 1500:
-            print(f"skipping {sym}: only {len(bars)} candles")
+            skipped.append(f"{sym}: only {len(bars)} candles, need 1,500")
             continue
         results.append(analyze(sym, bars))
     text = report(results)
+    if skipped:
+        text += "\n\n## Skipped\n\n" + "\n".join(f"- {x}" for x in skipped)
+        print("\n".join(skipped))
     with open(os.path.join(ROOT, "RESEARCH_REPORT.md"), "w") as f:
         f.write(text + "\n")
     os.makedirs(os.path.join(ROOT, "research", "out"), exist_ok=True)

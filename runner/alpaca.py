@@ -25,6 +25,7 @@ def _norm(b):
 def fetch_crypto_bars(symbol, timeframe, start, end=None, key=None, secret=None):
     """Bars oldest first. Crypto data works without keys; keys are sent if given."""
     s = requests.Session()
+    key, secret = (key or "").strip(), (secret or "").strip()
     if key and secret:
         s.headers.update({"APCA-API-KEY-ID": key, "APCA-API-SECRET-KEY": secret})
     out, token = [], None
@@ -34,7 +35,11 @@ def fetch_crypto_bars(symbol, timeframe, start, end=None, key=None, secret=None)
             p["end"] = end
         if token:
             p["page_token"] = token
-        r = s.get(DATA_URL + "/v1beta3/crypto/us/bars", params=p, timeout=TIMEOUT)
+        for attempt in range(6):          # retry when throttled (429) or Alpaca hiccups (5xx)
+            r = s.get(DATA_URL + "/v1beta3/crypto/us/bars", params=p, timeout=TIMEOUT)
+            if r.status_code != 429 and r.status_code < 500:
+                break
+            time.sleep(2 ** attempt)
         r.raise_for_status()
         d = r.json()
         out.extend(_norm(b) for b in (d.get("bars") or {}).get(symbol, []))
