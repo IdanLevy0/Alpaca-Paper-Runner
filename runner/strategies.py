@@ -84,6 +84,21 @@ def manage_breakout_trend(bars, trade):
     return {"stop": new_stop, "exit": e50 is not None and closes[-1] < e50}
 
 
+def explain_breakout_trend(bars):
+    """One line for the run log: how close the last closed candle is to a breakout_trend entry."""
+    if len(bars) < WARMUP:
+        return f"only {len(bars)} bars, need {WARMUP}"
+    closes = [b["c"] for b in bars]
+    c, sma200 = closes[-1], sum(closes[-200:]) / 200
+    hh = ind.highest([b["h"] for b in bars], 20)[-1]
+    gap = (hh / c - 1) * 100
+    trend = "yes" if c > sma200 else f"no, {(sma200 / c - 1) * 100:.1f}% below"
+    brk = "yes" if c > hh else f"needs +{gap:.1f}%"
+    return f"close {c:,.0f} | 20-bar high {hh:,.0f} ({brk}) | above SMA200 {sma200:,.0f}: {trend}"
+
+
+EXPLAIN = {"breakout_trend": explain_breakout_trend}
+
 # Strategies with candle-close exit management. Others use fixed stop/target/time only.
 MANAGERS = {"breakout_trend": manage_breakout_trend}
 

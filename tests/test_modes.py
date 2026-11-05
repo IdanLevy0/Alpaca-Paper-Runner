@@ -51,3 +51,9 @@ def test_missed_candles_are_logged(isolated):
     fake.advance(len(bars) - 1)
     notes = R.step(fake, fake.now(), st, live=False)
     assert any("MISSED 3 candle" in n for n in notes)
+
+
+def test_explain_line():
+    from runner.strategies import explain_breakout_trend
+    line = explain_breakout_trend(make_bars(LOOKBACK))
+    assert "20-bar high" in line and "SMA200" in line

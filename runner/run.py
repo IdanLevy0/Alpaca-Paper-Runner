@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from runner import config                                  # noqa: E402
-from runner.strategies import STRATEGIES, MANAGERS, LOOKBACK  # noqa: E402
+from runner.strategies import STRATEGIES, MANAGERS, EXPLAIN, LOOKBACK  # noqa: E402
 
 STATE_DIR = os.path.join(ROOT, "state")
 STATE_FILE = os.path.join(STATE_DIR, "state.json")
@@ -166,7 +166,8 @@ def step(client, now, st, live):
     name = config.STRATEGY
     sig = STRATEGIES[name](bars)
     if not sig:
-        return notes + [f"flat, no signal on {last}"]
+        why = EXPLAIN.get(name)
+        return notes + [f"flat, no signal on {last}" + (f" | {why(bars)}" if why else "")]
 
     day = iso(now)[:10]
     if st["entries"].get(day, 0) >= config.MAX_ENTRIES_PER_DAY:
