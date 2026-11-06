@@ -6,7 +6,7 @@
 - Holdout 2024+ untouched for all stock cards.
 - Not yet: ETF data (SPY, QQQ...), stock paper bot, stock replay viewer.
 - H004 (gap-and-go) and H005 (volume-spike continuation) drafted 2026-11-06, status DRAFT, not tested yet.
-- Bash refusals fixed 2026-11-06 (setup chat): never `cd`, never cat/ls; see CLAUDE.md "Shell rules".
+- Windows command setup fixed 2026-11-06; follow CLAUDE.md "Windows shell rules".
 - Digest 2026-11-06 written. BTC bot flat.
 ## Next 3
 1. Quant: write strategy code for H004/H005 in stocks/strategies.py, freeze (commit card + code), then test.

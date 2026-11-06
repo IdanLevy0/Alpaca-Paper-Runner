@@ -31,15 +31,15 @@ Every agent, every task, appends to `research/journal/YYYY-MM-DD.md`:
 **Did:** ...  **Result:** numbers  **Next / open questions:** ...
 ```
 
-## Shell rules (Windows; breaking these gets commands refused)
+## Windows shell rules
 - The shell ALREADY starts in this project folder. Never start a command with `cd`. Never use absolute X:/ paths.
 - Read files with the Read / Glob / Grep tools, never `cat`, `ls`, `head`, `tail`, `echo >>` in Bash.
 - Edit files with Edit / Write, never shell redirection.
 - Bash is only for these, one command per call, no `&&` chains:
   `py -m pytest -q` | `py -m stocks.research --card H###` | `py -m stocks.research` | `git status` | `git diff ...` |
   `git log ...` | `git add <files>` | `git commit -m "..."`
-- If a command is refused, do not retry variations. Note the exact error in the journal, put a TRY IT item in
-  NEEDS-YOU.md ("tell Claude in the setup chat: <error>"), and do other useful work.
+- If a command errors, note the exact error in the journal, add a TRY IT item in NEEDS-YOU.md
+  ("tell Claude in the setup chat: <error>"), and continue with other useful work.
 
 ## Commands (Windows, run from this folder)
 - Tests: `py -m pytest -q`  (must pass before and after any code change)
