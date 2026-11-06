@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 backtest/bars_4h_*.json
 .pytest_cache/
+stocks/cache/
