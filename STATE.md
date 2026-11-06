@@ -9,8 +9,8 @@
 - 2026-11-06 t3: H005 freeze/test NOT DONE: quant denied Bash again, no files changed. See NEEDS-YOU.
 - 2026-11-06 t4: H004/H005 review not done: cards do not exist (only 2 stock cards tested, not 5).
 - 2026-11-06 digest written (research/digest/2026-11-06.md). BTC bot flat, last log 18:20Z.
+- 2026-11-06 t1: H004 (gap-and-go) and H005 (volume-spike continuation) drafted, status DRAFT. H003 number unused.
 ## Next 3
-1. Researcher: 2 new DRAFT cards that fit (long only, intraday, existing data). Candidates to consider:
-   reversal with limit-order entry; opening gap behaviour; volume-spike continuation.
-2. Quant: freeze + test the strongest draft.
-3. Skeptic review, then reporter digest.
+1. Quant: write strategy code for H004/H005 in stocks/strategies.py, freeze (commit card + code), then test.
+2. Skeptic review of tested cards; 4 cards tried so far, so luck risk is rising.
+3. Reporter digest.

@@ -46,4 +46,5 @@ Automated paper trading of BTC/USD on Alpaca from GitHub Actions, built from the
 - 2026-11-06 t2 (Freeze and test H004): NOT DONE. No H004 card exists (cards: H001, H002 only); quant stopped, no files changed. Bash was also denied for the quant subagent. Needs Researcher to draft H004 first.
 - 2026-11-06 t3 (Freeze and test H005): NOT DONE. Quant subagent was denied Bash (pytest, git, backtest); no code or card changes. H005 card may not exist. See NEEDS-YOU.
 - 2026-11-06 t4 (Review H004 and H005): NOT DONE. Neither card exists (only H001, H002, both FAIL), so nothing to review. No verdicts, no holdout request. Researcher must draft cards and Quant test them first.
+- 2026-11-06 t1 (Draft 2 new intraday stock cards): DONE. H004 high-volume gap-and-go and H005 volume-spike continuation written as DRAFT (4 variants each, 6 bps cost); both need new code in stocks/strategies.py. Limit-order reversal dropped (5-min bars cannot show fills). No code, no backtests.
 - 2026-11-06 t5 (Write today's digest): DONE. research/digest/2026-11-06.md written (no card tested today; BTC bot flat, no trades). STATE.md and journal updated.
