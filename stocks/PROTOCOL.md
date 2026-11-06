@@ -47,3 +47,8 @@ per year. Shows how much of the market's return a flat-by-close trader can ever 
 3. Holdout: one run, only after Idan agrees, for a variant that passed 1 and 2.
 A hypothesis that fails a gate stops there and is logged. Paper trading a failed hypothesis is allowed
 only as a clearly labelled learning bot.
+
+## Holdout log
+- 2026-11-06: H001 (reversal_z3_h24, frozen, already FAILED gate 1) replayed on the last ~21 sessions of the holdout
+  period at Idan's request (stockbot/replay.py, for the trade-by-trade replay page). No other card has touched the
+  holdout. Agents must not use that page or state/stocks/replay.json when designing new cards.

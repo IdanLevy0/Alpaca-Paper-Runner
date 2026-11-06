@@ -54,6 +54,9 @@ def iso(dt):
 class History:
     """Same shape the research features expect: bars (S, D, 78, 5), valid (S, D), dates (D,)."""
 
+    def day_range(self, first, last):
+        return np.where((self.dates >= first) & (self.dates <= last))[0]
+
     def __init__(self, symbols, dates, raw):
         self.symbols, self.dates = symbols, np.array(dates)
         self.bars = np.zeros((len(symbols), len(dates), SLOTS, 5), dtype=np.float32)

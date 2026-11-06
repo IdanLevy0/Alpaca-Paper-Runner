@@ -187,3 +187,22 @@ def test_features_match_research_code():
     pc, sg = F.prev_close(u)[:, k], F.sigma60(u)[:, k]
     for i, s in enumerate(u.symbols):
         assert feats[s][0] == pytest.approx(pc[i]) and feats[s][1] == pytest.approx(sg[i], rel=1e-9)
+
+
+def test_replay_matches_live_bot(isolated, monkeypatch):
+    """The replay page's trades must be the live bot's trades on the same data."""
+    import csv
+    from stockbot import replay as R, config as C
+    u = SynthU(seed=11)
+    strat = Reversal(Z=2.0, H=24, K=5)
+    monkeypatch.setattr(C, "SYMBOLS", u.symbols)
+    monkeypatch.setattr(C, "STRATEGY", strat)
+    fake = FakeAlpaca(u)
+    end = L.slot_start(u.dates.tolist()[-1], 78) + timedelta(hours=2)
+    fake.now = end
+    data = R.build(fake, 10, end)
+    replay(u, strat, u.dates.tolist()[-10:])
+    live = sorted((r["date"], r["symbol"], round(float(r["entry"]), 2), round(float(r["exit"]), 2)) for r in csv.DictReader(open(L.TRADES_FILE)))
+    rep = sorted((t["date"], t["symbol"], t["entry"], t["exit"]) for t in data["trades"])
+    assert len(rep) >= 5 and rep == live
+    assert all(t["z"] <= -2.0 and len(t["bars"]) == 78 for t in data["trades"])
