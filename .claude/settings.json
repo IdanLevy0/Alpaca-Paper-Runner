@@ -1,12 +1,26 @@
 {
   "permissions": {
     "deny": [
-      "Edit(./runner/**)", "Write(./runner/**)",
-      "Edit(./.github/**)", "Write(./.github/**)",
-      "Edit(./state/**)", "Write(./state/**)",
-      "Read(./.env)", "Edit(./.env)", "Write(./.env)",
-      "Bash(git push:*)", "Bash(git push *)", "Bash(git push)",
-      "Bash(git remote:*)", "Bash(git remote *)"
+      "Edit(./runner/**)",
+      "Write(./runner/**)",
+      "Edit(./.github/**)",
+      "Write(./.github/**)",
+      "Edit(./state/**)",
+      "Write(./state/**)",
+      "Read(./.env)",
+      "Edit(./.env)",
+      "Write(./.env)",
+      "Bash(git push:*)",
+      "Bash(git push *)",
+      "Bash(git push)",
+      "Bash(git remote:*)",
+      "Bash(git remote *)",
+      "Edit(./stockbot/**)",
+      "Write(./stockbot/**)",
+      "Edit(./stocks/features.py)",
+      "Write(./stocks/features.py)",
+      "Edit(./stocks/data.py)",
+      "Write(./stocks/data.py)"
     ]
   }
 }

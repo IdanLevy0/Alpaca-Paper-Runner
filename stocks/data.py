@@ -46,6 +46,26 @@ def early_closes(first_year=2016, last_year=2026):
 EARLY = early_closes()
 
 
+def day_to_array(by_slot, date):
+    """One session -> (bars float32 (78, 5) [o,h,l,c,v], valid bool). by_slot: {slot: (o, h, l, c, v)}.
+    Shared by the research cache and the live stock bot, so both apply the same cleaning rules."""
+    arr = np.zeros((SLOTS, 5), dtype=np.float32)
+    ok = date not in EARLY and len(by_slot) >= MIN_BARS and 0 in by_slot
+    if ok and any(max((b[1] - max(b[0], b[3])) / b[3], (min(b[0], b[3]) - b[2]) / b[3]) > MAX_WICK
+                  for b in by_slot.values()):
+        ok = False
+    prev = by_slot[0][0] if 0 in by_slot else None
+    for i in range(SLOTS):
+        b = by_slot.get(i)
+        if b is None:
+            if prev is not None:
+                arr[i] = (prev, prev, prev, prev, 0)
+        else:
+            arr[i] = b[:5]
+            prev = b[3]
+    return arr, bool(ok)
+
+
 def convert(sym, src=SRC, cache=CACHE):
     with gzip.open(os.path.join(src, sym + ".json.gz"), "rt", encoding="utf-8") as fh:
         raw = json.load(fh)
@@ -53,20 +73,8 @@ def convert(sym, src=SRC, cache=CACHE):
     bars = np.zeros((len(dates), SLOTS, 5), dtype=np.float32)
     valid = np.zeros(len(dates), dtype=bool)
     for k, d in enumerate(dates):
-        by = {b[0]: b for b in raw[d] if 0 <= b[0] < SLOTS}
-        ok = d not in EARLY and len(by) >= MIN_BARS and 0 in by
-        if ok and any(max((b[2] - max(b[1], b[4])) / b[4], (min(b[1], b[4]) - b[3]) / b[4]) > MAX_WICK
-                      for b in by.values()):
-            ok = False
-        prev = by[0][1] if 0 in by else None
-        for i in range(SLOTS):
-            b = by.get(i)
-            if b is None:
-                bars[k, i] = (prev, prev, prev, prev, 0) if prev is not None else 0
-            else:
-                bars[k, i] = b[1:6]
-                prev = b[4]
-        valid[k] = ok
+        by = {b[0]: tuple(b[1:6]) for b in raw[d] if 0 <= b[0] < SLOTS}
+        bars[k], valid[k] = day_to_array(by, d)
     np.savez(os.path.join(cache, sym + ".npz"), dates=np.array(dates), bars=bars, valid=valid)
     return len(dates), int(valid.sum())
 

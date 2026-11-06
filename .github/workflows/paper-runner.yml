@@ -11,7 +11,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-24.04
-    timeout-minutes: 4
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -25,6 +25,13 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           TRADING_ENABLED: ${{ vars.TRADING_ENABLED }}
         run: python -m runner.run
+      - name: Stock bot pass (market hours only; exits at once otherwise)
+        if: always()
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          STOCKS_ENABLED: ${{ vars.STOCKS_ENABLED }}
+        run: python -m stockbot.live
       - name: Save state and logs
         if: always()
         run: |

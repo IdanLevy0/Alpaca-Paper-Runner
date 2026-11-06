@@ -4,7 +4,8 @@
 - Stocks: 100 large caps, 5-min bars 2016-2026 cached. Engine + tests ready (`py -m pytest -q`).
 - Tested: H001 intraday reversal FAIL (small edge < costs), H002 late-day momentum FAIL.
 - Holdout 2024+ untouched for all stock cards.
-- Not yet: ETF data (SPY, QQQ...), stock paper bot, stock replay viewer.
+- Stock paper bot built 2026-11-06 (stockbot/, H001 learning bot), first trading day Monday. Agents may not edit it.
+- Not yet: ETF data (SPY, QQQ...), stock replay viewer.
 - H004 (gap-and-go) and H005 (volume-spike continuation) drafted 2026-11-06, status DRAFT, not tested yet.
 - Windows command setup fixed 2026-11-06; follow CLAUDE.md "Windows shell rules".
 - Digest 2026-11-06 written. BTC bot flat.

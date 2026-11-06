@@ -1,0 +1,26 @@
+name: stockbot-check
+on:
+  workflow_dispatch: {}     # run by hand: replays the last full session with real data, no orders
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m stockbot.check
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+      - if: always()
+        run: |
+          git config user.name "paper-runner"
+          git config user.email "paper-runner@users.noreply.github.com"
+          git add state/stocks/check.md
+          git diff --cached --quiet || (git commit -m "stock bot check" -q && git pull --rebase -q && git push -q)

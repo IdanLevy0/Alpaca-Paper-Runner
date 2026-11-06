@@ -39,3 +39,15 @@ An open position keeps its stop order on Alpaca even when the runner is off.
 
 ## What gets saved
 `state/state.json` (open trade), `state/trades.csv` (closed trades), `state/runs.log` (last 500 passes).
+
+## Stock paper bot (stockbot/)
+Runs in the same GitHub workflow as the BTC bot (every 5 minutes, cron-job.org), only during market hours.
+- Strategy: stockbot/config.py (now H001 reversal_z3_h24 as a LEARNING BOT; it failed the research gate).
+- Budget: 50% of paper equity, up to 5 positions (10% each), whole shares, stop order on Alpaca for each,
+  time exit after 2 hours, everything sold from 15:55, no trading on early-close days, daily loss stop -2%.
+- Order ids start with `stk-`. It never reads or sells BTC/USD.
+- Switch on: GitHub > Settings > Secrets and variables > Actions > Variables > New: `STOCKS_ENABLED` = `true`.
+  Without it (or with `false`) the bot runs in DRY mode: same decisions, logged, no orders.
+- Logs: state/stocks/runs.log (every pass), trades.csv (every trade), days.csv (one line per day).
+- Real-data check without orders: Actions > stockbot-check > Run workflow -> state/stocks/check.md.
+- Stop: set `STOCKS_ENABLED` to `false`, or add state/KILL (stops BOTH bots' orders).

@@ -8,7 +8,9 @@ Idan is learning quant trading by watching this team work. Write for him: plain 
 no jargon without a one-line explanation.
 
 ## Hard rules (also enforced in .claude/settings.json)
-- Never edit `runner/`, `.github/`, `state/`, `.env`, and never `git push`. Pushing changes what the live bot runs.
+- Never edit `runner/`, `stockbot/`, `stocks/features.py`, `stocks/data.py`, `.github/`, `state/`, `.env`, and never
+  `git push`. The live bots run that code; pushing changes what they run. In `stocks/strategies.py` only ADD new
+  classes and CARDS entries; never change an existing class (the live stock bot runs `Reversal`).
   Anything that should change a live bot goes to NEEDS-YOU.md as `APPROVE: [BLOCKING] ...` for Idan.
 - Never read or print API keys. Never put secrets in any file.
 - Rules before results: a hypothesis card's Rules and Variants are committed BEFORE its first backtest. After
