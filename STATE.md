@@ -6,6 +6,8 @@
 - Holdout 2024+ untouched for all stock cards.
 - Not yet: ETF data (SPY, QQQ...), stock paper bot, stock replay viewer.
 - 2026-11-06 t2: H004 freeze/test blocked: no H004 card exists; quant subagent also lacked Bash. See NEEDS-YOU.
+- 2026-11-06 t3: H005 freeze/test NOT DONE: quant denied Bash again, no files changed. See NEEDS-YOU.
+- 2026-11-06 t4: H004/H005 review not done: cards do not exist (only 2 stock cards tested, not 5).
 ## Next 3
 1. Researcher: 2 new DRAFT cards that fit (long only, intraday, existing data). Candidates to consider:
    reversal with limit-order entry; opening gap behaviour; volume-spike continuation.
