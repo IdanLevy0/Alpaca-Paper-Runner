@@ -1,6 +1,8 @@
-.env
-__pycache__/
 *.pyc
-backtest/bars_4h_*.json
+.env
+.hq/
 .pytest_cache/
+__pycache__/
+backtest/bars_4h_*.json
+status/
 stocks/cache/

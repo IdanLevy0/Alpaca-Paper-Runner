@@ -49,7 +49,11 @@ def by_year(daily):
     return {y: float((np.prod(1 + np.array(v)) - 1) * 100) for y, v in out.items()}
 
 
-def main(n_random=100):
+def family(name):
+    return name.split("_")[0]
+
+
+def main(n_random=100, card=None):
     t0 = time.time()
     u = Universe()
     feats = {"prev_close": F.prev_close(u), "sigma60": F.sigma60(u)}
@@ -57,7 +61,7 @@ def main(n_random=100):
     tr0, tr1 = PERIODS["train"]
     va0, va1 = PERIODS["valid"]
     res = {}
-    for st in variants():
+    for st in variants(card):
         row = {}
         for c in (0.0, COST, 0.0005):
             daily, trades = run(u, feats, st, tr0, tr1, cost=c)
@@ -66,8 +70,8 @@ def main(n_random=100):
         s = stats(*row[COST])
         print(f"{st.name}: train mean {s['mean_bp']:+.2f}bp/day, {s['trades_per_day']:.1f} trades/day "
               f"({time.time() - t0:.0f}s)", flush=True)
-    for fam in ("reversal", "latemom"):
-        names = [k for k in res if k.startswith(fam)]
+    for fam in sorted({family(k) for k in res}):
+        names = [k for k in res if family(k) == fam]
         best = max(names, key=lambda k: np.mean([x[1] for x in res[k]["train"][COST][0]]))
         res[best]["best_of_family"] = True
         st = res[best]["strategy"]
@@ -135,8 +139,19 @@ def report(res, split):
 
 
 if __name__ == "__main__":
-    res, split = main(int(sys.argv[1]) if len(sys.argv) > 1 else 100)
+    # python -m stocks.research                 -> H001 + H002, writes STOCK_RESEARCH_REPORT.md
+    # python -m stocks.research --card H003     -> that card only, writes research/results/H003.md
+    args = sys.argv[1:]
+    card = args[args.index("--card") + 1] if "--card" in args else None
+    n = int(args[args.index("--random") + 1]) if "--random" in args else 100
+    res, split = main(n, card)
     text = report(res, split)
-    with open(os.path.join(ROOT, "STOCK_RESEARCH_REPORT.md"), "w") as f:
+    if card:
+        os.makedirs(os.path.join(ROOT, "research", "results"), exist_ok=True)
+        path = os.path.join(ROOT, "research", "results", card + ".md")
+        text = text.replace("# Stock intraday research: train + validation", f"# {card} results: train + validation")
+    else:
+        path = os.path.join(ROOT, "STOCK_RESEARCH_REPORT.md")
+    with open(path, "w") as f:
         f.write(text + "\n")
     print(text)

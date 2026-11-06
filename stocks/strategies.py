@@ -67,6 +67,15 @@ class LateMomentum:
         return None, 77 - (71 + 1)
 
 
-def variants():
-    return ([Reversal(Z, H) for Z in (2.0, 3.0) for H in (12, 24)]
-            + [LateMomentum(K, m) for K in (5, 10) for m in (False, True)])
+# Hypothesis cards (research/cards/H###-*.md) -> the exact variants pre-registered on that card.
+# The Quant agent adds a new entry here when a card is approved; existing entries are never edited.
+CARDS = {
+    "H001": lambda: [Reversal(Z, H) for Z in (2.0, 3.0) for H in (12, 24)],
+    "H002": lambda: [LateMomentum(K, m) for K in (5, 10) for m in (False, True)],
+}
+
+
+def variants(card=None):
+    if card:
+        return CARDS[card]()
+    return CARDS["H001"]() + CARDS["H002"]()
