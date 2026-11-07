@@ -1,5 +1,5 @@
 # H004: high-volume gap-and-go (opening range breakout)
-Status: FROZEN
+Status: REVIEWED: FAIL
 Market: stocks (100 large caps)      Holding: minutes/hours, flat by 15:55
 Drafted by researcher on 2026-11-06
 
@@ -72,5 +72,16 @@ The holdout stays sealed. If the sign comes out reversed, that is logged as a fi
 would be a new card.
 
 ## Results (quant, after running)  -> research/results/H004.md
+Run 2026-11-07, train 2016-04..2021-12, base cost 0.03%/side.
+- Before costs every variant is roughly flat to slightly positive (+0.03 to +0.50bp/day). Trades are rare: 0.1-0.4 a day
+  across all 100 stocks (about 150 trades in six years for the best variant), so most days the money sits in cash.
+- Best: gapgo_g2_r3 (gap >= 2%, opening volume >= 3x). +0.33bp/day after costs, +11.7bp per trade, 54% winners.
+  Luck p-value 0.18 (needs < 0.05). Beats 94% of random picks with the same timing. Years: -2.9% to +5.4%.
+- Gate 1: FAIL on the p-value. Validation 2022-23 (shown for information only, gate 2 not reached): +1.22bp/day.
 
 ## Skeptic review
+Verdict: FAIL (2026-11-07). The direction is right (gap-ups on heavy volume that break the opening range drifted up
+a bit more than random stocks) but with ~25 trades a year the result can't be told apart from luck, and the
+best variant was picked from 4. Validation being positive is encouraging but it isn't a pass and does not reopen this
+card. The honest follow-up is a NEW card that tests the same frozen rule (G 2%, R 3) on stocks it has never seen (a
+wider universe), which adds trades without retuning anything.

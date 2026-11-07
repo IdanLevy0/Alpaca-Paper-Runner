@@ -1,5 +1,5 @@
 # H005: volume-spike continuation (5-minute bar)
-Status: FROZEN
+Status: REVIEWED: FAIL
 Market: stocks (100 large caps)      Holding: 30-60 minutes (or to 15:55), flat by 15:55
 Drafted by researcher on 2026-11-06
 
@@ -65,5 +65,15 @@ The holdout stays sealed. If the sign comes out reversed, that is logged as a fi
 would be a new card.
 
 ## Results (quant, after running)  -> research/results/H005.md
+Run 2026-11-07, train 2016-04..2021-12, base cost 0.03%/side.
+- Before costs the edge is essentially zero: +0.2 to +1.3bp/day, under +1bp per trade. At 4x volume the rule fires
+  about 9 times a day, so costs (6bp a round trip) turn it into -10bp/day (about -23% a year).
+- Best: volspike_r8_h6. -1.49bp/day after costs, -4.1bp per trade, 37% winners. Luck p-value 0.997. Random picks with
+  the same timing and the same tight stop do even worse (it beats 100% of them), so the volume filter isn't useless,
+  it just doesn't earn enough to pay for trading. Negative in 5 of 6 train years. Validation 2022-23: -2.34bp/day.
+- Gate 1: FAIL.
 
 ## Skeptic review
+Verdict: FAIL (2026-11-07). No continuation worth trading after a 5-minute volume spike in large caps. The tight stop
+(spike bar's low) gets hit often (37% winners), which is the "stop triggers on noise" risk the card predicted. Not
+worth re-running with other thresholds: the before-cost edge is too small for any version to clear 6bp a trade.
