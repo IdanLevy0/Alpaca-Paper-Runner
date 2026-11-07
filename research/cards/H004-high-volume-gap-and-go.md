@@ -1,5 +1,5 @@
 # H004: high-volume gap-and-go (opening range breakout)
-Status: DRAFT
+Status: FROZEN
 Market: stocks (100 large caps)      Holding: minutes/hours, flat by 15:55
 Drafted by researcher on 2026-11-06
 
@@ -61,6 +61,15 @@ per-stock "mean opening-30-minute volume over prior 20 valid sessions" feature i
 sigma60 and prev_close as far as I could see). Volume is assumed to be in the bars array; quant to confirm.
 Register as CARDS["H004"] with the 4 variants above. The look-ahead trap: never index slot-N with slot < N (the
 2026-11-06 bug); OR_high uses slots 0-5 only, never the decision bar.
+
+## Frozen 2026-11-07 (before any result)
+Code: stocks/strategies.py GapGo, CARDS["H004"]; features in stocks/features.py; tests in tests/test_volume_cards.py
+(look-ahead scramble, prior-sessions-only volume baselines, stop at a fixed price level, one entry per stock per day).
+Coding choices the card left open: the opening range stays slots 0-5 at every decision (not updated later); ties in RV keep symbol order.
+Gates as in stocks/PROTOCOL.md: best variant on train after 0.03%/side must have p < 0.05 and beat >= 90% of random
+runs (same times and counts, random eligible stocks, same stop/exit formula), then be positive on validation 2022-23.
+The holdout stays sealed. If the sign comes out reversed, that is logged as a finding, not traded: a reversed rule
+would be a new card.
 
 ## Results (quant, after running)  -> research/results/H004.md
 

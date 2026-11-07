@@ -1,5 +1,5 @@
 # H005: volume-spike continuation (5-minute bar)
-Status: DRAFT
+Status: FROZEN
 Market: stocks (100 large caps)      Holding: 30-60 minutes (or to 15:55), flat by 15:55
 Drafted by researcher on 2026-11-06
 
@@ -54,6 +54,15 @@ Needs NEW code in stocks/strategies.py: a new class plus a precomputed per-stock
 the bars array. Slot-level selection with sorting by volume ratio mirrors Reversal.select. Register as CARDS["H005"].
 Watch for look-ahead: baseVol must use prior sessions only, and the decision bar's own volume is allowed (bar is closed).
 Zero-volume baseline must be skipped (not eligible).
+
+## Frozen 2026-11-07 (before any result)
+Code: stocks/strategies.py VolSpike, CARDS["H005"]; features in stocks/features.py; tests in tests/test_volume_cards.py
+(look-ahead scramble, prior-sessions-only volume baselines, stop at a fixed price level, one entry per stock per day).
+Coding choices the card left open: a slot with zero or missing 20-session base volume is not eligible; ties keep symbol order; if the next bar opens below the spike low the trade exits at that open (PROTOCOL stop rule).
+Gates as in stocks/PROTOCOL.md: best variant on train after 0.03%/side must have p < 0.05 and beat >= 90% of random
+runs (same times and counts, random eligible stocks, same stop/exit formula), then be positive on validation 2022-23.
+The holdout stays sealed. If the sign comes out reversed, that is logged as a finding, not traded: a reversed rule
+would be a new card.
 
 ## Results (quant, after running)  -> research/results/H005.md
 

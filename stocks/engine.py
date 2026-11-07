@@ -4,6 +4,9 @@ Per day: walk the strategy's decision slots in order. At a decision (bar close a
 exit slot is <= slot are already closed, so capacity is K minus positions still open. New positions enter
 at the open of slot+1 and leave at the open of min(slot+1+hold, 77) unless the stop is hit first
 (checked on 5-minute lows from the entry bar on; a bar opening below the stop exits at its open).
+A pick is (sym, stop_frac, hold) with the stop as a fraction below the entry open, or
+(sym, None, hold, stop_level) with the stop as a price fixed at the decision (H004/H005).
+ctx["entered"] holds every symbol entered earlier the same day (for one-entry-per-day rules).
 Daily portfolio return = sum of trade returns / K. The holdout is refused unless allow_holdout=True.
 """
 import numpy as np
@@ -18,10 +21,10 @@ class SealedHoldout(Exception):
     pass
 
 
-def simulate_trade(day_bars, i, entry_slot, exit_slot, stop_frac, cost):
+def simulate_trade(day_bars, i, entry_slot, exit_slot, stop_frac, cost, stop_level=None):
     o, l = day_bars[i, :, 0].astype(np.float64), day_bars[i, :, 2].astype(np.float64)
     raw_entry = o[entry_slot]
-    stop = raw_entry * (1 - stop_frac) if stop_frac else None
+    stop = float(stop_level) if stop_level is not None else (raw_entry * (1 - stop_frac) if stop_frac else None)
     px, reason, xs = o[exit_slot], "time", exit_slot
     if stop is not None:
         lows = l[entry_slot:exit_slot]
@@ -42,8 +45,8 @@ def run(u, feats, strategy, first, last, cost=COST, allow_holdout=False, picker=
     days = u.day_range(first, last)
     daily, trades = [], []
     for d in days:
-        ctx = {"bars": u.bars[:, d], "valid": u.valid[:, d].copy(), "date": u.dates[d],
-               "sigma60": feats["sigma60"][:, d], "prev_close": feats["prev_close"][:, d]}
+        ctx = {k: v[:, d] for k, v in feats.items()}
+        ctx.update({"bars": u.bars[:, d], "valid": u.valid[:, d].copy(), "date": u.dates[d], "entered": set()})
         if not ctx["valid"].any():
             continue
         open_pos, day_tr = [], []
@@ -56,9 +59,11 @@ def run(u, feats, strategy, first, last, cost=COST, allow_holdout=False, picker=
             picks = strategy.select(ctx, slot, held)[:room]
             if picker is not None:
                 picks = picker(ctx, slot, held, picks)
-            for i, stop_frac, hold in picks:
+            for i, stop_frac, hold, *lvl in picks:
                 es = slot + 1
-                t = simulate_trade(ctx["bars"], i, es, min(es + hold, FLAT_SLOT), stop_frac, cost)
+                t = simulate_trade(ctx["bars"], i, es, min(es + hold, FLAT_SLOT), stop_frac, cost,
+                                   lvl[0] if lvl else None)
+                ctx["entered"].add(i)
                 t["date"] = ctx["date"]
                 open_pos.append(t)
                 day_tr.append(t)
@@ -72,7 +77,7 @@ def random_picker(strategy, rng):
     def pick(ctx, slot, held, picks):
         if not picks:
             return []
-        pool = np.where(strategy.eligible(ctx, held))[0]
+        pool = np.where(strategy.eligible(ctx, held, slot))[0]
         chosen = rng.choice(pool, size=min(len(picks), len(pool)), replace=False)
-        return [(int(i), *strategy.params_for(ctx, int(i))) for i in chosen]
+        return [(int(i), *strategy.params_for(ctx, int(i), slot)) for i in chosen]
     return pick

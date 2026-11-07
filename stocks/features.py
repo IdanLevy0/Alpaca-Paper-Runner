@@ -41,3 +41,29 @@ def market_split(u, pc):
         on = np.where(ok, o / pc - 1, np.nan)
         intra = np.where(u.valid, c / o - 1, np.nan)
     return u.dates, np.nanmean(on, axis=0), np.nanmean(intra, axis=0)
+
+
+def _prior_mean(u, per_day, lookback):
+    """per_day: (S, D, ...) values for each session. Returns, for each stock and VALID day, the mean of the same value
+    over the prior `lookback` valid sessions (today excluded), NaN until enough history. Invalid days stay NaN."""
+    S, D = u.valid.shape
+    out = np.full(per_day.shape, np.nan, dtype=np.float32)
+    for s in range(S):
+        idx = np.where(u.valid[s])[0]
+        if len(idx) <= lookback:
+            continue
+        x = per_day[s, idx].astype(np.float64)
+        cs = np.concatenate([np.zeros((1,) + x.shape[1:]), np.cumsum(x, axis=0)])
+        j = np.arange(lookback, len(idx))
+        out[s, idx[j]] = (cs[j] - cs[j - lookback]) / lookback
+    return out
+
+
+def open_vol_base(u, lookback=20):
+    """(S, D): mean volume of the first 30 minutes (slots 0-5) over the prior `lookback` valid sessions (H004)."""
+    return _prior_mean(u, u.bars[:, :, :6, 4].astype(np.float64).sum(axis=2), lookback)
+
+
+def slot_vol_base(u, lookback=20):
+    """(S, D, 78) float32: each slot's mean volume over the prior `lookback` valid sessions (H005)."""
+    return _prior_mean(u, u.bars[:, :, :, 4], lookback)

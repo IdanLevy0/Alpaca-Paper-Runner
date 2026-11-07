@@ -7,8 +7,8 @@ Check this before proposing anything. Newest at the bottom. "Before costs / afte
 | [H001](H001-intraday-reversal.md) | Buy unusually sharp 60-min drops (z <= -2/-3), hold 1-2h | REVIEWED: FAIL | Best +1.1bp/day before costs, -3.0bp/day after (-7%/yr); entries beat 94% of random picks, but costs (~4bp/day) eat it. Valid 2022-23 -2.6bp/day |
 | [H002](H002-late-day-momentum.md) | Buy biggest yesterday-close-to-10:00 gainers at 15:30, sell 15:55 | REVIEWED: FAIL | Negative even before costs (-0.6bp/day); after costs -4.1bp/day. The source studied the S&P 500 index, not single stocks |
 | H003 (not a card) | Overnight vs intraday split | Descriptive | 2016-2023 most of the 100 stocks' return came overnight (e.g. 2021 +20.9% overnight vs +4.5% intraday) |
-| [H004](H004-high-volume-gap-and-go.md) | Buy stocks gapping up >=1-2% on 2-3x opening volume when they break the first-30-min high; stop at range low, exit 15:55 | DRAFT | Not tested. Thin sources (monthly-horizon volume paper + practitioner guide) |
-| [H005](H005-volume-spike-continuation.md) | Buy a 5-min bar with 4-8x normal volume that closes in its top quarter; hold 30-60 min | DRAFT | Not tested. Exploratory, no direct source; could be the opposite sign (reversal) |
+| [H004](H004-high-volume-gap-and-go.md) | Buy stocks gapping up >=1-2% on 2-3x opening volume when they break the first-30-min high; stop at range low, exit 15:55 | FROZEN | Running (2026-11-07). Thin sources (monthly-horizon volume paper + practitioner guide) |
+| [H005](H005-volume-spike-continuation.md) | Buy a 5-min bar with 4-8x normal volume that closes in its top quarter; hold 30-60 min | FROZEN | Running (2026-11-07). Exploratory, no direct source; could be the opposite sign (reversal) |
 
 ## Crypto (Alpaca BTC/USD, 0.25%/side, long only), for reference
 | Card | Idea | Result |

@@ -23,7 +23,7 @@ class Reversal:
         with np.errstate(divide="ignore", invalid="ignore"):
             return (c / prev - 1) / ctx["sigma60"]
 
-    def eligible(self, ctx, held):
+    def eligible(self, ctx, held, slot=None):
         ok = ctx["valid"] & np.isfinite(ctx["sigma60"]) & (ctx["sigma60"] > 0)
         ok[list(held)] = False
         return ok
@@ -34,7 +34,7 @@ class Reversal:
         order = [i for i in np.argsort(z) if ok[i]]
         return [(i, 2.0 * ctx["sigma60"][i], self.H) for i in order]
 
-    def params_for(self, ctx, i):
+    def params_for(self, ctx, i, slot=None):
         return 2.0 * ctx["sigma60"][i], self.H
 
 
@@ -50,7 +50,7 @@ class LateMomentum:
         with np.errstate(divide="ignore", invalid="ignore"):
             return ctx["bars"][:, 5, 3].astype(np.float64) / ctx["prev_close"] - 1
 
-    def eligible(self, ctx, held):
+    def eligible(self, ctx, held, slot=None):
         ok = ctx["valid"] & np.isfinite(ctx["prev_close"])
         ok[list(held)] = False
         return ok
@@ -63,8 +63,81 @@ class LateMomentum:
         order = [i for i in np.argsort(-s) if ok[i] and s[i] > 0]
         return [(i, None, 77 - (slot + 1)) for i in order]
 
-    def params_for(self, ctx, i):
+    def params_for(self, ctx, i, slot=None):
         return None, 77 - (71 + 1)
+
+
+class GapGo:
+    """H4 (card H004): gap up >= G on opening-30-minute relative volume >= R, buy when a decision bar closes above
+    the first-30-minute high and above today's open. Stop at the first-30-minute low, exit at 15:55.
+    Opening range = slots 0-5 only (09:30-10:00), so it never contains a decision bar."""
+    decision_slots = (6, 12, 18)
+
+    def __init__(self, G=0.01, R=2.0, K=5):
+        self.G, self.R, self.K = G, R, K
+        self.name = f"gapgo_g{G * 100:g}_r{R:g}"
+
+    def scores(self, ctx, slot):
+        """Relative volume of the first 30 minutes (ranking key)."""
+        with np.errstate(divide="ignore", invalid="ignore"):
+            return ctx["bars"][:, :6, 4].astype(np.float64).sum(axis=1) / ctx["open_vol_base"]
+
+    def eligible(self, ctx, held, slot=None):
+        ok = (ctx["valid"] & np.isfinite(ctx["prev_close"]) & (ctx["prev_close"] > 0)
+              & np.isfinite(ctx["open_vol_base"]) & (ctx["open_vol_base"] > 0))
+        ok[list(held | ctx.get("entered", set()))] = False
+        return ok
+
+    def select(self, ctx, slot, held):
+        b = ctx["bars"].astype(np.float64)
+        rv = self.scores(ctx, slot)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            gap = b[:, 0, 0] / ctx["prev_close"] - 1
+        or_high, or_low, c = b[:, :6, 1].max(axis=1), b[:, :6, 2].min(axis=1), b[:, slot, 3]
+        ok = (self.eligible(ctx, held) & np.isfinite(rv) & (gap >= self.G) & (rv >= self.R)
+              & (c > or_high) & (c > b[:, 0, 0]))
+        order = [i for i in np.argsort(-rv, kind="stable") if ok[i]]
+        return [(i, None, 77 - (slot + 1), float(or_low[i])) for i in order]
+
+    def params_for(self, ctx, i, slot):
+        return None, 77 - (slot + 1), float(ctx["bars"][i, :6, 2].min())
+
+
+class VolSpike:
+    """H5 (card H005): a 5-minute bar with volume >= R x that slot's 20-session average that closes up and in the top
+    quarter of its range. Buy next open, hold H bars (or to 15:55), stop at the spike bar's low."""
+    decision_slots = tuple(range(6, 53))
+
+    def __init__(self, R=4.0, H=6, K=5):
+        self.R, self.H, self.K = R, H, K
+        self.name = f"volspike_r{R:g}_h{H}"
+
+    def scores(self, ctx, slot):
+        base = ctx["slot_vol_base"][:, slot].astype(np.float64)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            return ctx["bars"][:, slot, 4].astype(np.float64) / base
+
+    def eligible(self, ctx, held, slot=None):
+        ok = ctx["valid"].copy()
+        if slot is not None:
+            base = ctx["slot_vol_base"][:, slot]
+            ok &= np.isfinite(base) & (base > 0)
+        ok[list(held | ctx.get("entered", set()))] = False
+        return ok
+
+    def select(self, ctx, slot, held):
+        o, h, l, c = (ctx["bars"][:, slot, k].astype(np.float64) for k in range(4))
+        ratio = self.scores(ctx, slot)
+        rng = h - l
+        with np.errstate(divide="ignore", invalid="ignore"):
+            pos = np.where(rng > 0, (c - l) / rng, 0.0)
+        ok = (self.eligible(ctx, held, slot) & np.isfinite(ratio) & (ratio >= self.R) & (c > o)
+              & (rng > 0) & (pos >= 0.75))
+        order = [i for i in np.argsort(-ratio, kind="stable") if ok[i]]
+        return [(i, None, self.H, float(l[i])) for i in order]
+
+    def params_for(self, ctx, i, slot):
+        return None, self.H, float(ctx["bars"][i, slot, 2])
 
 
 # Hypothesis cards (research/cards/H###-*.md) -> the exact variants pre-registered on that card.
@@ -72,6 +145,8 @@ class LateMomentum:
 CARDS = {
     "H001": lambda: [Reversal(Z, H) for Z in (2.0, 3.0) for H in (12, 24)],
     "H002": lambda: [LateMomentum(K, m) for K in (5, 10) for m in (False, True)],
+    "H004": lambda: [GapGo(G, R) for G in (0.01, 0.02) for R in (2.0, 3.0)],
+    "H005": lambda: [VolSpike(R, H) for R in (4.0, 8.0) for H in (6, 12)],
 }
 
 

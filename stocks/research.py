@@ -57,6 +57,10 @@ def main(n_random=100, card=None):
     t0 = time.time()
     u = Universe()
     feats = {"prev_close": F.prev_close(u), "sigma60": F.sigma60(u)}
+    if card in ("H004", "H005"):
+        feats["open_vol_base"] = F.open_vol_base(u)
+    if card == "H005":
+        feats["slot_vol_base"] = F.slot_vol_base(u)
     print(f"loaded + features {time.time() - t0:.0f}s", flush=True)
     tr0, tr1 = PERIODS["train"]
     va0, va1 = PERIODS["valid"]
