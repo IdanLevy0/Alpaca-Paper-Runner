@@ -404,24 +404,17 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
- "positions": [
+ "positions": [],
+ "closed": [
   {
    "sym": "BRK.B",
-   "qty": 17,
-   "entry": 563.7,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-09T15:30:30Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-09T17:30:00Z",
-   "stop": 560.0684655183966,
-   "stop_order_id": "249fedf5-b0ad-4f1d-a8eb-f15b796e7b06",
-   "z": -3.1
+   "ret": 0.011051978002483365,
+   "pnl": 105.90999999999838
   }
  ],
- "closed": [],
  "halted": false,
  "summary_written": false
 }
