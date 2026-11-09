@@ -6,3 +6,4 @@ __pycache__/
 backtest/bars_4h_*.json
 status/
 stocks/cache/
+daily/cache/

@@ -10,6 +10,17 @@ Check this before proposing anything. Newest at the bottom. "Before costs / afte
 | [H004](H004-high-volume-gap-and-go.md) | Buy stocks gapping up >=1-2% on 2-3x opening volume when they break the first-30-min high; stop at range low, exit 15:55 | REVIEWED: FAIL | Best (gap 2%, 3x vol) +0.33bp/day after costs, +11.7bp/trade, but only ~25 trades/yr: p 0.18. Valid 2022-23 +1.2bp/day. Follow-up: same frozen rule on new stocks |
 | [H005](H005-volume-spike-continuation.md) | Buy a 5-min bar with 4-8x normal volume that closes in its top quarter; hold 30-60 min | REVIEWED: FAIL | Under +1bp/day before costs; -1.5 to -10bp/day after (fires up to 9x/day). Valid -2.3bp/day |
 
+## Multi-day (daily bars, fills next open; daily/PROTOCOL.md)
+| Card | Idea | Status | Result |
+|---|---|---|---|
+| [E001](E001-etf-trend.md) | 5 asset-class ETFs, each held only while above its trend | FROZEN | Running |
+| [E002](E002-low-volatility-stocks.md) | Hold the calmest 10-20 of the 100 stocks, monthly | FROZEN | Running |
+| [E003](E003-weekly-reversal.md) | Buy last week's biggest losers, hold a week | FROZEN | Running |
+| [E004](E004-turn-of-month.md) | SPY only around the turn of the month | FROZEN | Running |
+| [B001](B001-btc-trend.md) | BTC only above its N-day average | FROZEN | Running |
+| [B002](B002-btc-momentum.md) | BTC when 20/60/120-day momentum votes yes | FROZEN | Running |
+| [B003](B003-btc-turn-of-month.md) | BTC around the turn of the month | FROZEN | Running |
+
 ## Crypto (Alpaca BTC/USD, 0.25%/side, long only), for reference
 | Card | Idea | Result |
 |---|---|---|
