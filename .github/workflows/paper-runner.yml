@@ -32,6 +32,13 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           STOCKS_ENABLED: ${{ vars.STOCKS_ENABLED }}
         run: python -m stockbot.live
+      - name: Daily strategies pass (once a day after 09:35 ET; exits at once otherwise)
+        if: always()
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          DAILY_ENABLED: ${{ vars.DAILY_ENABLED }}
+        run: python -m daily.live
       - name: Save state and logs
         if: always()
         run: |
