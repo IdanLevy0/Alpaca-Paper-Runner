@@ -1,5 +1,5 @@
 # E003: Weekly reversal in large caps
-Status: FROZEN (2026-11-09, before any result)   Market: the 100 stocks   Holding: 1 week
+Status: REVIEWED: FAIL (frozen 2026-11-09, tested 2026-11-11)   Market: the 100 stocks   Holding: 1 week
 ## Idea
 Last week's biggest losers tend to bounce next week (overreaction / liquidity). The multi-day cousin of H001,
 where costs are small compared with weekly moves.
@@ -13,3 +13,6 @@ At each week's last close: L-day return for each stock; hold the N lowest equal 
 ## Why it might fail
 The effect has shrunk a lot in large caps since the 1990s; ~100% weekly turnover costs ~3%/yr at 0.03%/side.
 Code: daily/strategies.py WeeklyReversal.
+
+## Results (2026-11-11) -> research/results/E003.md
+Best weekrev_n10_l10: Sharpe 0.66 vs 0.98, beats 28% of random picks, ~67x turnover, 58% drawdown.

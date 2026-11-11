@@ -13,13 +13,13 @@ Check this before proposing anything. Newest at the bottom. "Before costs / afte
 ## Multi-day (daily bars, fills next open; daily/PROTOCOL.md)
 | Card | Idea | Status | Result |
 |---|---|---|---|
-| [E001](E001-etf-trend.md) | 5 asset-class ETFs, each held only while above its trend | FROZEN | Running |
-| [E002](E002-low-volatility-stocks.md) | Hold the calmest 10-20 of the 100 stocks, monthly | FROZEN | Running |
-| [E003](E003-weekly-reversal.md) | Buy last week's biggest losers, hold a week | FROZEN | Running |
-| [E004](E004-turn-of-month.md) | SPY only around the turn of the month | FROZEN | Running |
-| [B001](B001-btc-trend.md) | BTC only above its N-day average | FROZEN | Running |
-| [B002](B002-btc-momentum.md) | BTC when 20/60/120-day momentum votes yes | FROZEN | Running |
-| [B003](B003-btc-turn-of-month.md) | BTC around the turn of the month | FROZEN | Running |
+| [E001](E001-etf-trend.md) | 5 asset-class ETFs, each held only while above its trend | REVIEWED: FAIL | Best trend_sma200_month: +6.7%/yr, Sharpe 1.08 vs 0.94, drawdown 7% vs 26%, but beats only 79% of random timings (needs 90). Valid 2022-23 -1.8%/yr. |
+| [E002](E002-low-volatility-stocks.md) | Hold the calmest 10-20 of the 100 stocks, monthly | PASSED train + validation (holdout not run) | Best lowvol_n10_l60: +17.7%/yr, Sharpe 1.29 vs 0.98, vol 13% vs 18%, drawdown 23% vs 35%, beats 100% of random picks. Valid 2022-23 +7.2%/yr, Sharpe 0.63 vs 0.41. |
+| [E003](E003-weekly-reversal.md) | Buy last week's biggest losers, hold a week | REVIEWED: FAIL | Best weekrev_n10_l10: Sharpe 0.66 vs 0.98, beats 28% of random picks, ~67x turnover, 58% drawdown. |
+| [E004](E004-turn-of-month.md) | SPY only around the turn of the month | REVIEWED: FAIL | Best tom_m1_p4: +8.0%/yr, Sharpe 0.92 vs SPY 1.08 (in the market ~20% of days), 90% vs random. Valid -0.1%/yr. |
+| [B001](B001-btc-trend.md) | BTC only above its N-day average | REVIEWED: FAIL | Best btc_sma100: -19%/yr on 2021-22 train (whipsaws at 0.25%/side), beats 41% of random. |
+| [B002](B002-btc-momentum.md) | BTC when 20/60/120-day momentum votes yes | REVIEWED: FAIL | Best btc_tsmom3of3: -3%/yr train, beats 54% of random. |
+| [B003](B003-btc-turn-of-month.md) | BTC around the turn of the month | REVIEWED: FAIL (close) | Best btc_tom_m4_p2: +26.8%/yr vs BTC -25%/yr on 2021-22, beats 98% of random, but p 0.076 on only 2 years of data. Valid 2023 +14.9% (BTC +155%). |
 
 ## Crypto (Alpaca BTC/USD, 0.25%/side, long only), for reference
 | Card | Idea | Result |

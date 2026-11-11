@@ -1,5 +1,5 @@
 # E004: Turn of the month (SPY)
-Status: FROZEN (2026-11-09, before any result)   Market: SPY   Holding: about 4-6 days a month
+Status: REVIEWED: FAIL (frozen 2026-11-09, tested 2026-11-11)   Market: SPY   Holding: about 4-6 days a month
 ## Idea
 Stock returns cluster around the turn of the month (pay-day flows). Hold SPY only then, cash otherwise.
 ## Sources
@@ -12,3 +12,6 @@ Hold SPY for the open-to-open intervals starting on the last `m` trading days of
 ## Why it might fail
 Widely known since the 1980s; the effect may be arbitraged. Lower total return than buy-and-hold by design.
 Code: daily/strategies.py TurnOfMonth.
+
+## Results (2026-11-11) -> research/results/E004.md
+Best tom_m1_p4: +8.0%/yr, Sharpe 0.92 vs SPY 1.08 (in the market ~20% of days), 90% vs random. Valid -0.1%/yr.
