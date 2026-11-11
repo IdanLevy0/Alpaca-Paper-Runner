@@ -54,3 +54,4 @@ Automated paper trading of BTC/USD on Alpaca from GitHub Actions, built from the
 - 2026-11-06: stockbot/replay.py + stockbot-replay workflow: last N sessions with real data (SIP features, IEX intraday) through the engine (= live bot, tested), trades with why-bought/why-sold data + bars, before/after costs -> state/stocks/replay.json. Holdout viewed for H001 only (logged in stocks/PROTOCOL.md). 39 tests pass.
 
 - 2026-11-07: H004 (gap-and-go) and H005 (volume spike) frozen, coded, tested. Both FAIL gate 1. H004 best +0.33bp/day after costs but p 0.18 (~25 trades/yr); H005 negative after costs. Results in research/results/.
+- 2026-11-11: Multi-day engine + 7 cards tested (only E002 passed train+valid, failed holdout). Daily runner live with E001/E002/B003 as 5% learning sleeves; H001 cut to 5%; BTC bot now ignores sleeve BTC. Repo going public for free Actions minutes.

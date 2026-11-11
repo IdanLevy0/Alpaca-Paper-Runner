@@ -26,3 +26,10 @@ Best variant on train = highest Sharpe after base costs (the goal is steady retu
 ## Confidence and budget (used by the multi-strategy runner)
 - Passed gates 1-3: up to 25% of the account. Passed 1-2: 10-15%. Everything else that Idan wants running: a 5%
   "learning" slice. Each slice is then scaled down (never up) so its expected volatility is <= 10% a year.
+
+## Holdout log
+- 2026-11-11 (written BEFORE running): Idan approved the one-time holdout for E002 lowvol_n10_l60 (passed gates 1-2).
+  Pass rule, same as validation: mean daily return > 0 after 0.03%/side AND Sharpe >= benchmark Sharpe - 0.25,
+  over 2024-01-01 to the last downloaded day. No other variant and no other card is run on the holdout.
+- 2026-11-11 RESULT: FAIL. 2024-01-02..2026-11-10: E002 +11.5%/yr, Sharpe 0.89, vol 13.3%, max drawdown 12.3%;
+  benchmark +18.2%/yr, Sharpe 1.25, drawdown 18.1%. Needed Sharpe >= 1.00. E002 stays a learning bot. Holdout now used.

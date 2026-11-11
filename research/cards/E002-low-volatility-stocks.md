@@ -1,5 +1,5 @@
 # E002: Low-volatility stocks
-Status: PASSED train + validation (holdout not run) (frozen 2026-11-09, tested 2026-11-11)   Market: the 100 stocks   Holding: 1 month
+Status: REVIEWED: FAIL at holdout (passed train + validation) (frozen 2026-11-09, tested 2026-11-11)   Market: the 100 stocks   Holding: 1 month
 ## Idea
 Calm stocks have historically earned about as much as jumpy ones with much less risk. Hold the calmest N of the 100.
 ## Sources
@@ -17,3 +17,4 @@ Code: daily/strategies.py LowVol.
 
 ## Results (2026-11-11) -> research/results/E002.md
 Best lowvol_n10_l60: +17.7%/yr, Sharpe 1.29 vs 0.98, vol 13% vs 18%, drawdown 23% vs 35%, beats 100% of random picks. Valid 2022-23 +7.2%/yr, Sharpe 0.63 vs 0.41.
+Holdout 2024-01..2026-11 (run once, 2026-11-11, Idan approved): +11.5%/yr, Sharpe 0.89 vs benchmark 1.25 (needed >= 1.00), smaller drawdown (12% vs 18%). FAIL: runs only as a 5% learning bot.

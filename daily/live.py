@@ -97,7 +97,7 @@ def targets(panel, sl):
 
 
 def step(client, now, st, live, sleeves=None):
-    sleeves = C.SLEEVES if sleeves is None else sleeves
+    sleeves = [s for s in C.SLEEVES if not s["card"].startswith("B")] if sleeves is None else sleeves
     notes = []
     et = now.astimezone(NY)
     today = et.date().isoformat()
@@ -165,6 +165,59 @@ def step(client, now, st, live, sleeves=None):
     return notes
 
 
+def step_crypto(client, now, st, live, sleeves):
+    """BTC sleeves: once a day, on the first pass after 00:05 UTC, from daily bars through yesterday (UTC)."""
+    notes = []
+    today = now.astimezone(timezone.utc).date().isoformat()
+    if not sleeves or (now.hour, now.minute) < (0, 5) or st.get("last_crypto_rebalance") == today:
+        return notes
+    sym = "BTC/USD"
+    start = (now.date() - timedelta(days=HISTORY_DAYS)).isoformat()
+    panel = build_panel(client.crypto_daily_bars(sym, start, today), today)
+    equity, px = client.equity(), client.crypto_price(sym)
+    for sl in sleeves:
+        key = f"{sl['card']}:{sl['variant']}"
+        mine = st["sleeves"].setdefault(key, {"shares": {}, "invested": 0.0})
+        w, _ = targets(panel, sl)
+        diff = w.get(sym, 0.0) * equity * slice_pct(sl) - mine["shares"].get(sym, 0.0) * px
+        if abs(diff) < C.MIN_ORDER_USD:
+            continue
+        coid = f"{C.ORDER_PREFIX}{sl['card']}-BTC-{today}-{'s' if diff < 0 else 'b'}"
+        if diff < 0:
+            qty = min(mine["shares"].get(sym, 0.0), round(-diff / px, 9))
+            fill = client.wait_filled(client.crypto_sell_qty(sym, qty, coid)["id"]) if live else \
+                {"status": "filled", "filled_qty": qty, "filled_avg_price": px}
+            sign = -1
+        else:
+            fill = client.wait_filled(client.crypto_buy_notional(sym, round(diff, 2), coid)["id"]) if live else \
+                {"status": "filled", "filled_qty": round(diff / px, 9), "filled_avg_price": px}
+            sign = 1
+        if fill.get("status") != "filled":
+            notes.append(f"{key}: BTC order {fill.get('status')}")
+            continue
+        q, p = float(fill["filled_qty"]), float(fill["filled_avg_price"])
+        mine["shares"][sym] = round(mine["shares"].get(sym, 0.0) + sign * q, 9)
+        if mine["shares"][sym] <= 1e-9:
+            mine["shares"].pop(sym)
+        mine["invested"] = round(mine["invested"] + sign * q * p, 2)
+        append_csv(TRADES_FILE, {"date": today, "time": now.isoformat(timespec="seconds"), "sleeve": key, "symbol": sym,
+                                 "side": "buy" if sign > 0 else "sell", "qty": q, "price": p,
+                                 "decision_price": round(px, 2), "usd": round(q * p, 2)})
+        notes.append(f"{key}: {'BUY' if sign > 0 else 'SELL'} BTC {q:g} @ {p:.2f}")
+    st["last_crypto_rebalance"] = today
+    return notes
+
+
+def btc_held_by_sleeves(state_file=None):
+    """BTC the daily sleeves own (the BTC bot subtracts this from the account position so the two never mix)."""
+    try:
+        with open(state_file or STATE_FILE) as f:
+            st = json.load(f)
+        return sum(v["shares"].get("BTC/USD", 0.0) for v in st.get("sleeves", {}).values())
+    except (OSError, ValueError, KeyError):
+        return 0.0
+
+
 def trading_live():
     return os.environ.get("DAILY_ENABLED", "").strip().lower() == "true" and not os.path.exists(KILL_FILE)
 
@@ -174,12 +227,21 @@ def main():
     from stockbot.live import safe_error
     now = datetime.now(timezone.utc)
     et = now.astimezone(NY)
-    if et.weekday() >= 5 or not (9 * 60 + 30 <= et.hour * 60 + et.minute <= 15 * 60 + 30):
+    stock_sleeves = [s for s in C.SLEEVES if not s["card"].startswith("B")]
+    crypto_sleeves = [s for s in C.SLEEVES if s["card"].startswith("B")]
+    market_hours = et.weekday() < 5 and 9 * 60 + 30 <= et.hour * 60 + et.minute <= 15 * 60 + 30
+    crypto_due = bool(crypto_sleeves) and (now.hour, now.minute) >= (0, 5)
+    if not (market_hours or crypto_due):
         return
     live = trading_live()
     st = load_state()
+    if crypto_due and st.get("last_crypto_rebalance") == now.date().isoformat() and not market_hours:
+        return
     try:
-        notes = step(DailyClient.from_env(), now, st, live)
+        client = DailyClient.from_env()
+        notes = step_crypto(client, now, st, live, crypto_sleeves) if crypto_due else []
+        if market_hours:
+            notes += step(client, now, st, live, stock_sleeves)
         save_state(st)
         if notes:
             log_run(f"{now.isoformat(timespec='seconds')} {'PAPER' if live else 'DRY'}: " + "; ".join(notes))

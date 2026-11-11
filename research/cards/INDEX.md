@@ -14,7 +14,7 @@ Check this before proposing anything. Newest at the bottom. "Before costs / afte
 | Card | Idea | Status | Result |
 |---|---|---|---|
 | [E001](E001-etf-trend.md) | 5 asset-class ETFs, each held only while above its trend | REVIEWED: FAIL | Best trend_sma200_month: +6.7%/yr, Sharpe 1.08 vs 0.94, drawdown 7% vs 26%, but beats only 79% of random timings (needs 90). Valid 2022-23 -1.8%/yr. |
-| [E002](E002-low-volatility-stocks.md) | Hold the calmest 10-20 of the 100 stocks, monthly | PASSED train + validation (holdout not run) | Best lowvol_n10_l60: +17.7%/yr, Sharpe 1.29 vs 0.98, vol 13% vs 18%, drawdown 23% vs 35%, beats 100% of random picks. Valid 2022-23 +7.2%/yr, Sharpe 0.63 vs 0.41. |
+| [E002](E002-low-volatility-stocks.md) | Hold the calmest 10-20 of the 100 stocks, monthly | FAIL at holdout (passed train + validation) | Holdout 2024-26: +11.5%/yr, Sharpe 0.89 vs 1.25. Train: lowvol_n10_l60 +17.7%/yr, Sharpe 1.29 vs 0.98, vol 13% vs 18%, drawdown 23% vs 35%, beats 100% of random picks. Valid 2022-23 +7.2%/yr, Sharpe 0.63 vs 0.41. |
 | [E003](E003-weekly-reversal.md) | Buy last week's biggest losers, hold a week | REVIEWED: FAIL | Best weekrev_n10_l10: Sharpe 0.66 vs 0.98, beats 28% of random picks, ~67x turnover, 58% drawdown. |
 | [E004](E004-turn-of-month.md) | SPY only around the turn of the month | REVIEWED: FAIL | Best tom_m1_p4: +8.0%/yr, Sharpe 0.92 vs SPY 1.08 (in the market ~20% of days), 90% vs random. Valid -0.1%/yr. |
 | [B001](B001-btc-trend.md) | BTC only above its N-day average | REVIEWED: FAIL | Best btc_sma100: -19%/yr on 2021-22 train (whipsaws at 0.25%/side), beats 41% of random. |

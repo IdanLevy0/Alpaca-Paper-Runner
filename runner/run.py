@@ -85,7 +85,8 @@ def step(client, now, st, live):
     bars = completed(client.bars(sym, config.TIMEFRAME, start4), now, config.BAR_SECONDS)[-LOOKBACK:]
     if not bars:
         return ["no bars"]
-    pos = client.position_qty(sym)
+    from daily.live import btc_held_by_sleeves
+    pos = round(max(0.0, client.position_qty(sym) - btc_held_by_sleeves()), 9)   # only the runner's own BTC
 
     if st["in_trade"]:
         if pos <= 0:

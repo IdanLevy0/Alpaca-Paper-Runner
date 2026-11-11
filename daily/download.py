@@ -9,9 +9,6 @@ import json
 import os
 import sys
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -43,22 +40,25 @@ def load_keys():
 
 
 def get(path, params, keys, tries=5):
-    url = DATA + path + "?" + urllib.parse.urlencode(params)
+    """GET with retries. Uses requests (its own certificate bundle works on Windows); errors say what Alpaca said."""
+    import requests
     headers = {"APCA-API-KEY-ID": keys[0], "APCA-API-SECRET-KEY": keys[1]} if keys else {}
+    last = "unknown error"
     for n in range(tries):
         try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
-                return json.load(r)
-        except urllib.error.HTTPError as e:
-            if e.code in (429, 500, 502, 503, 504) and n < tries - 1:
-                time.sleep(2 ** n)
-                continue
-            raise RuntimeError(f"HTTP {e.code} for {path}") from None
-        except urllib.error.URLError:
-            if n < tries - 1:
-                time.sleep(2 ** n)
-                continue
-            raise RuntimeError(f"network error for {path}") from None
+            r = requests.get(DATA + path, params=params, headers=headers, timeout=30)
+        except requests.RequestException as e:
+            last = f"network: {type(e).__name__}"
+            time.sleep(2 ** n)
+            continue
+        if r.status_code == 200:
+            return r.json()
+        last = f"HTTP {r.status_code}: {r.text[:150]}"
+        if r.status_code in (429, 500, 502, 503, 504):
+            time.sleep(2 ** n)
+            continue
+        break
+    raise RuntimeError(last)
 
 
 def stock_bars(sym, keys, end):

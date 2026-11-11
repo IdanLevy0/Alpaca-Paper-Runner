@@ -32,3 +32,23 @@ class DailyClient(StockClient):
         return self._req("POST", self.url + "/v2/orders", json={
             "symbol": symbol, "qty": f"{qty:.6f}", "side": "sell", "type": "market", "time_in_force": "day",
             "client_order_id": coid})
+
+    # crypto (24/7). Daily bars close at 00:00 UTC.
+    def crypto_daily_bars(self, symbol, start, end):
+        from runner.alpaca import fetch_crypto_bars
+        bs = fetch_crypto_bars(symbol, "1Day", start, end)
+        return {symbol: [(b["t"][:10], b["o"], b["h"], b["l"], b["c"], b["v"]) for b in bs]}
+
+    def crypto_price(self, symbol):
+        d = self._req("GET", DATA_URL + "/v1beta3/crypto/us/latest/trades", params={"symbols": symbol})
+        return float(d["trades"][symbol]["p"])
+
+    def crypto_buy_notional(self, symbol, usd, coid):
+        return self._req("POST", self.url + "/v2/orders", json={
+            "symbol": symbol, "notional": f"{usd:.2f}", "side": "buy", "type": "market", "time_in_force": "gtc",
+            "client_order_id": coid})
+
+    def crypto_sell_qty(self, symbol, qty, coid):
+        return self._req("POST", self.url + "/v2/orders", json={
+            "symbol": symbol, "qty": f"{qty:.9f}", "side": "sell", "type": "market", "time_in_force": "gtc",
+            "client_order_id": coid})

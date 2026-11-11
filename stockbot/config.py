@@ -14,7 +14,7 @@ SYMBOLS = ['AAL', 'AAPL', 'ABBV', 'ACN', 'ADBE', 'AIG', 'AMGN', 'AMZN', 'AVGO', 
            'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PM', 'PSX', 'PYPL', 'QCOM', 'REGN', 'RTX', 'SBUX', 'SLB', 'T', 'TGT',
            'TSLA', 'TXN', 'UNH', 'UNP', 'UPS', 'USB', 'V', 'VLO', 'VZ', 'WFC', 'WMT', 'XOM']
 
-BUDGET_PCT = 0.50          # share of paper equity the stock bot may use; each of K slots gets BUDGET_PCT / K
+BUDGET_PCT = 0.05          # share of paper equity the stock bot may use; each of K slots gets BUDGET_PCT / K
 DAILY_LOSS_STOP = 0.02     # stop opening trades (and flatten) if today's stock P&L falls below -2% of equity
 LATE_ENTRY_MINUTES = 10    # act on a decision only if the pass runs within this many minutes of the bar close
 FLAT_SLOT = 77             # everything is sold from 15:55 on

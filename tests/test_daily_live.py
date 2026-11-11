@@ -110,3 +110,49 @@ def test_live_orders_are_tagged_and_sells_go_first():
     kinds = [o[0] for o in fc.orders]
     assert kinds == sorted(kinds, key=lambda x: x != "sell")
     assert all(o[-1].startswith("d-E001-") for o in fc.orders)
+
+
+class FakeCrypto:
+    def __init__(self, n_days=200, start="2026-03-01"):
+        import datetime as dt
+        d0 = dt.date.fromisoformat(start)
+        self.dates = [(d0 + dt.timedelta(days=k)).isoformat() for k in range(n_days)]
+        self.orders = []
+
+    def equity(self):
+        return 100000.0
+
+    def crypto_daily_bars(self, sym, start, end):
+        return {sym: [(d, 100.0, 101.0, 99.0, 100.0, 1.0) for d in self.dates if d < end]}
+
+    def crypto_price(self, sym):
+        return 100.0
+
+
+BTC_SLEEVE = {"card": "B003", "variant": "btc_tom_m4_p2", "stage": "learning", "vol": 0.278, "universe": ["BTC/USD"]}
+
+
+def _utc(date, h=0, m=10):
+    y, mo, d = map(int, date.split("-"))
+    return datetime(y, mo, d, h, m, tzinfo=timezone.utc)
+
+
+def test_crypto_sleeve_holds_only_around_month_end_and_once_a_day():
+    fc = FakeCrypto()
+    st = L.load_state()
+    key = "B003:btc_tom_m4_p2"
+    L.step_crypto(fc, _utc("2026-04-28"), st, False, [BTC_SLEEVE])     # 2 days before April's last day: in
+    held = st["sleeves"][key]["shares"].get("BTC/USD", 0)
+    assert held * 100 == pytest.approx(100000 * L.slice_pct(BTC_SLEEVE), rel=1e-6)
+    assert L.step_crypto(fc, _utc("2026-04-28", 6), st, False, [BTC_SLEEVE]) == []   # once a day
+    L.step_crypto(fc, _utc("2026-05-10"), st, False, [BTC_SLEEVE])     # mid-month: out
+    assert st["sleeves"][key]["shares"].get("BTC/USD", 0) == 0
+    assert L.step_crypto(fc, _utc("2026-05-11", 0, 2), st, False, [BTC_SLEEVE]) == []   # before 00:05
+
+
+def test_btc_bot_ignores_sleeve_btc(tmp_path):
+    import json
+    f = tmp_path / "s.json"
+    f.write_text(json.dumps({"sleeves": {"B003:x": {"shares": {"BTC/USD": 0.25}}, "E001:y": {"shares": {"SPY": 3}}}}))
+    assert L.btc_held_by_sleeves(str(f)) == 0.25
+    assert L.btc_held_by_sleeves(str(tmp_path / "missing.json")) == 0.0
