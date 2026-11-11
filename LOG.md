@@ -55,3 +55,4 @@ Automated paper trading of BTC/USD on Alpaca from GitHub Actions, built from the
 
 - 2026-11-07: H004 (gap-and-go) and H005 (volume spike) frozen, coded, tested. Both FAIL gate 1. H004 best +0.33bp/day after costs but p 0.18 (~25 trades/yr); H005 negative after costs. Results in research/results/.
 - 2026-11-11: Multi-day engine + 7 cards tested (only E002 passed train+valid, failed holdout). Daily runner live with E001/E002/B003 as 5% learning sleeves; H001 cut to 5%; BTC bot now ignores sleeve BTC. Repo going public for free Actions minutes.
+- 2026-11-11 evening: Reset state/daily/state.json (DRY run had written pretend holdings for E001/E002 and last_rebalance). Dry rows moved to state/daily/dry_run_2026-11-11*.csv. DRY mode now writes only dry_* files. Workflow already checks out main and retries the state push (commit a0e98a4). DAILY_ENABLED=true set by Idan; first live sleeve buys due after 09:35 ET Nov 12.

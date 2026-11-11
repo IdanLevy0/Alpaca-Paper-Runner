@@ -156,3 +156,27 @@ def test_btc_bot_ignores_sleeve_btc(tmp_path):
     f.write_text(json.dumps({"sleeves": {"B003:x": {"shares": {"BTC/USD": 0.25}}, "E001:y": {"shares": {"SPY": 3}}}}))
     assert L.btc_held_by_sleeves(str(f)) == 0.25
     assert L.btc_held_by_sleeves(str(tmp_path / "missing.json")) == 0.0
+
+
+def test_dry_mode_never_touches_live_state(tmp_path, monkeypatch):
+    import json
+    monkeypatch.setattr(L, "DIR", str(tmp_path))
+    live_file = tmp_path / "state.json"
+    live_file.write_text(json.dumps({"last_rebalance": None, "sleeves": {}}))
+    monkeypatch.setattr(L, "STATE_FILE", str(live_file))
+    monkeypatch.delenv("DAILY_ENABLED", raising=False)
+    calls = []
+
+    class Boom:
+        @classmethod
+        def from_env(cls):
+            calls.append(1)
+            raise RuntimeError("stop here")
+    import daily.client
+    monkeypatch.setattr(daily.client, "DailyClient", Boom)
+    monkeypatch.setattr(L, "datetime", type("D", (), {"now": staticmethod(
+        lambda tz=None: datetime(2026, 11, 12, 15, 0, tzinfo=timezone.utc))}))
+    with pytest.raises(SystemExit):
+        L.main()
+    assert calls and L.STATE_FILE.endswith("dry_state.json")
+    assert json.loads(live_file.read_text()) == {"last_rebalance": None, "sleeves": {}}

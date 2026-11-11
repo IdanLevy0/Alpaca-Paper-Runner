@@ -237,6 +237,11 @@ def main():
     if not (market_hours or crypto_due):
         return
     live = trading_live()
+    if not live:
+        # DRY mode keeps its own files so pretend fills never look like real holdings (bug seen 2026-11-11)
+        global STATE_FILE, TRADES_FILE, VALUES_FILE
+        STATE_FILE, TRADES_FILE, VALUES_FILE = (os.path.join(DIR, "dry_" + os.path.basename(f))
+                                                for f in (STATE_FILE, TRADES_FILE, VALUES_FILE))
     st = load_state()
     if crypto_due and st.get("last_crypto_rebalance") == now.date().isoformat() and not market_hours:
         return
