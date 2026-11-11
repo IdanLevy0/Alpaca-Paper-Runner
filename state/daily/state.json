@@ -1,4 +1,10 @@
 {
+ "last_crypto_rebalance": "2026-11-11",
  "last_rebalance": null,
- "sleeves": {}
+ "sleeves": {
+  "B003:btc_tom_m4_p2": {
+   "invested": 0.0,
+   "shares": {}
+  }
+ }
 }
