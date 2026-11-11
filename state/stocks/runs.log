@@ -158,3 +158,4 @@
 2026-11-10T21:00:51Z PAPER reversal_z3_h24: market closed
 2026-11-10T21:05:28Z PAPER reversal_z3_h24: market closed
 2026-11-11T17:30:44Z PAPER reversal_z3_h24: new day: features for 100/100 stocks; MISSED decision 10:30 (pass 121 min late); MISSED decision 11:30 (pass 61 min late); 12:30 decision: no stock past the trigger (closest: LYB z=-1.06, needs <= -3)
+2026-11-11T17:35:33Z PAPER reversal_z3_h24: 0 open, watching
