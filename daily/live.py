@@ -110,7 +110,10 @@ def step(client, now, st, live, sleeves=None):
         return []
     syms = sorted({s for sl in sleeves for s in sl["universe"]})
     start = (et.date() - timedelta(days=HISTORY_DAYS)).isoformat()
-    panel = build_panel(client.daily_bars(syms, start, today), today)
+    # free data plan: SIP data must be older than 15 minutes, so ask only up to 20 minutes ago (today's partial bar is
+    # dropped by build_panel anyway)
+    end = (now - timedelta(minutes=20)).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    panel = build_panel(client.daily_bars(syms, start, end), today)
     equity = client.equity()
     prices = client.latest_prices(syms)
     plan = []
