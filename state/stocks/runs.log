@@ -1,0 +1,159 @@
+2026-11-09T14:30:24Z PAPER ERROR ReadTimeout: HTTPSConnectionPool(host='data.alpaca.markets', port=443): Read timed out. (read timeout=20)
+2026-11-09T14:35:34Z PAPER reversal_z3_h24: new day: features for 100/100 stocks
+2026-11-09T14:40:22Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T14:45:24Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T14:50:25Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T14:55:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:00:53Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:05:27Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:10:19Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:15:24Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:20:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:25:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T15:30:30Z PAPER reversal_z3_h24: ENTRY BRK.B x17 @ 563.70 (z -3.1), stop 560.07, exit by 12:30
+2026-11-09T15:35:19Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T15:40:28Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T15:45:25Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T15:50:24Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T15:55:20Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:00:48Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:05:57Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:10:24Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:15:35Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:20:37Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:25:27Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:30:29Z PAPER reversal_z3_h24: 11:30 decision: no stock past the trigger (closest: GOOG z=-1.43, needs <= -3)
+2026-11-09T16:35:25Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:40:26Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:45:25Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:50:23Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T16:55:26Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:00:47Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:05:44Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:10:38Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:15:33Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:20:30Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:25:28Z PAPER reversal_z3_h24: 1 open, watching
+2026-11-09T17:30:46Z PAPER reversal_z3_h24: EXIT BRK.B time @ 569.93 (+1.11%); 12:30 decision: no stock past the trigger (closest: TGT z=-0.38, needs <= -3)
+2026-11-09T17:35:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T17:40:43Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T17:45:52Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T17:50:46Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T17:55:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:01:35Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:06:32Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:20:34Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:30:55Z PAPER reversal_z3_h24: 13:30 decision: no stock past the trigger (closest: BA z=-1.97, needs <= -3)
+2026-11-09T18:35:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:40:33Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:45:34Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:50:31Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T18:55:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:00:57Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:05:44Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:10:55Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:15:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:20:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:25:31Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:30:41Z PAPER reversal_z3_h24: 14:30 decision: no stock past the trigger (closest: COP z=-1.05, needs <= -3)
+2026-11-09T19:35:41Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:40:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:45:34Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:50:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T19:55:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:01:13Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:05:42Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:06:39Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:10:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:15:42Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:20:40Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:25:30Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:30:48Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:35:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:40:34Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:45:41Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:50:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-09T20:55:45Z PAPER reversal_z3_h24: day summary: 1 trades, P&L 105.91 USD
+2026-11-09T21:01:03Z PAPER reversal_z3_h24: market closed
+2026-11-09T21:05:20Z PAPER reversal_z3_h24: market closed
+2026-11-10T14:30:36Z PAPER reversal_z3_h24: new day: features for 100/100 stocks
+2026-11-10T14:35:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T14:40:40Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T14:45:44Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T14:50:45Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T14:55:45Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:01:13Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:05:40Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:10:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:15:33Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:20:22Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:25:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:30:30Z PAPER reversal_z3_h24: 10:30 decision: no stock past the trigger (closest: PYPL z=-2.42, needs <= -3)
+2026-11-10T15:35:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:40:33Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:45:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:50:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T15:55:26Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:01:10Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:05:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:10:27Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:15:38Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:20:41Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:25:31Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:31:02Z PAPER reversal_z3_h24: 11:30 decision: no stock past the trigger (closest: EQIX z=-1.58, needs <= -3)
+2026-11-10T16:35:46Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:40:40Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:46:06Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:50:43Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T16:55:31Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:01:01Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:05:39Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:10:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:15:27Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:20:22Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:25:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:30:31Z PAPER reversal_z3_h24: 12:30 decision: no stock past the trigger (closest: MSFT z=-2.54, needs <= -3)
+2026-11-10T17:35:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:40:23Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:45:26Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:50:30Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T17:55:24Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:00:32Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:05:31Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:09:44Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:10:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:15:41Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:20:27Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:25:26Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:30:28Z PAPER reversal_z3_h24: 13:30 decision: no stock past the trigger (closest: MSFT z=-0.78, needs <= -3)
+2026-11-10T18:35:21Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:40:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:45:27Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:50:36Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T18:55:26Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:00:57Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:06:03Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:10:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:15:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:20:29Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:25:35Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:30:52Z PAPER reversal_z3_h24: 14:30 decision: no stock past the trigger (closest: BKNG z=-1.52, needs <= -3)
+2026-11-10T19:35:45Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:40:45Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:46:01Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:50:41Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T19:55:47Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:01:18Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:05:55Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:10:57Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:15:24Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:20:28Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:25:39Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:30:56Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:35:35Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:40:32Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:45:25Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:50:26Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-10T20:55:29Z PAPER reversal_z3_h24: day summary: 0 trades, P&L 0.00 USD
+2026-11-10T21:00:51Z PAPER reversal_z3_h24: market closed
+2026-11-10T21:05:28Z PAPER reversal_z3_h24: market closed
