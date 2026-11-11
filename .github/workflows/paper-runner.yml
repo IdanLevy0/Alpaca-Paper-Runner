@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -45,4 +47,10 @@ jobs:
           git config user.name "paper-runner"
           git config user.email "paper-runner@users.noreply.github.com"
           git add state/
-          git diff --cached --quiet || (git commit -m "runner state" -q && git pull --rebase -q && git push -q)
+          git diff --cached --quiet && exit 0
+          git commit -m "runner state" -q
+          for i in 1 2 3; do
+            git pull --rebase -X theirs -q && git push -q && exit 0
+            sleep 5
+          done
+          exit 1
