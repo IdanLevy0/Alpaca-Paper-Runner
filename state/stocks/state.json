@@ -404,37 +404,22 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
- "positions": [
+ "positions": [],
+ "closed": [
   {
    "sym": "PFE",
-   "qty": 34,
-   "entry": 29.15,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-12T15:30:47Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-12T17:30:00Z",
-   "stop": 28.84671257164649,
-   "stop_order_id": "810268c6-4767-427a-98da-fe85849c620a",
-   "z": -4.13
+   "ret": 0.005145797598627766,
+   "pnl": 5.1000000000000725
   },
   {
    "sym": "TGT",
-   "qty": 6,
-   "entry": 162.52,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-12T15:30:47Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-12T17:30:00Z",
-   "stop": 160.27070962878236,
-   "stop_order_id": "3f2c6685-cc11-45f7-b091-995264c7aabc",
-   "z": -3.01
+   "ret": -0.0022151119862171553,
+   "pnl": -2.160000000000082
   }
  ],
- "closed": [],
  "halted": false,
  "summary_written": false
 }

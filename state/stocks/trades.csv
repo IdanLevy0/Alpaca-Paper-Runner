@@ -1,2 +1,4 @@
 date,symbol,decision,entry_time,entry,exit_time,exit,reason,qty,ret_pct,pnl_usd,z,strategy
 2026-11-09,BRK.B,10:30,2026-11-09T15:30:30Z,563.7,2026-11-09T17:30:46Z,569.93,time,17,1.105,105.91,-3.1,reversal_z3_h24
+2026-11-12,PFE,10:30,2026-11-12T15:30:47Z,29.15,2026-11-12T17:30:38Z,29.3,time,34,0.515,5.1,-4.13,reversal_z3_h24
+2026-11-12,TGT,10:30,2026-11-12T15:30:47Z,162.52,2026-11-12T17:30:38Z,162.16,time,6,-0.222,-2.16,-3.01,reversal_z3_h24
