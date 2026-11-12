@@ -36,7 +36,8 @@ class DailyClient(StockClient):
     # crypto (24/7). Daily bars close at 00:00 UTC.
     def crypto_daily_bars(self, symbol, start, end):
         from runner.alpaca import fetch_crypto_bars
-        bs = fetch_crypto_bars(symbol, "1Day", start, end)
+        h = self.s.headers                      # send the keys: anonymous crypto data is rate-limited hard (429)
+        bs = fetch_crypto_bars(symbol, "1Day", start, end, h.get("APCA-API-KEY-ID"), h.get("APCA-API-SECRET-KEY"))
         return {symbol: [(b["t"][:10], b["o"], b["h"], b["l"], b["c"], b["v"]) for b in bs]}
 
     def crypto_price(self, symbol):
