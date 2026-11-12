@@ -1,10 +1,34 @@
 {
  "last_crypto_rebalance": "2026-11-12",
- "last_rebalance": null,
+ "last_rebalance": "2026-11-12",
  "sleeves": {
   "B003:btc_tom_m4_p2": {
    "invested": 0.0,
    "shares": {}
+  },
+  "E001:trend_sma200_month": {
+   "invested": 4004.2,
+   "shares": {
+    "DBC": 32.618117,
+    "EFA": 9.593196,
+    "SPY": 1.323101,
+    "VNQ": 10.307661
+   }
+  },
+  "E002:lowvol_n10_l60": {
+   "invested": 3735.2,
+   "shares": {
+    "AAPL": 1.046403,
+    "ABBV": 1.25618,
+    "AIG": 4.480269,
+    "BRK.B": 0.62891,
+    "COST": 0.341109,
+    "JPM": 1.083314,
+    "KO": 3.817271,
+    "PG": 2.201839,
+    "UNP": 1.22427,
+    "V": 0.874898
+   }
   }
  }
 }
