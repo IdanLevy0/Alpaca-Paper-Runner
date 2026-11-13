@@ -404,76 +404,37 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
- "positions": [
+ "positions": [],
+ "closed": [
   {
    "sym": "CSCO",
-   "qty": 10,
-   "entry": 96.81,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-13T15:30:35Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-13T17:30:00Z",
-   "stop": 95.24394859000351,
-   "stop_order_id": "6e780453-6b13-41ea-bf73-2ca14488d24e",
-   "z": -4.17
+   "ret": -0.007850428674723742,
+   "pnl": -7.600000000000051
   },
   {
    "sym": "TXN",
-   "qty": 3,
-   "entry": 299.67,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-13T15:30:35Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-13T17:30:00Z",
-   "stop": 293.6980607055787,
-   "stop_order_id": "a9171452-9268-41f9-b055-a5a5fadc80f6",
-   "z": -3.79
+   "ret": 0.002068942503420379,
+   "pnl": 1.8600000000000136
   },
   {
    "sym": "AVGO",
-   "qty": 2,
-   "entry": 343.14,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-13T15:30:35Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-13T17:30:00Z",
-   "stop": 336.06566750925873,
-   "stop_order_id": "96d016c3-e1a5-40e3-b8b2-a38b1d8fce06",
-   "z": -3.49
+   "ret": 0.005537098560354448,
+   "pnl": 3.800000000000068
   },
   {
    "sym": "INTC",
-   "qty": 17,
-   "entry": 57.688824,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-13T15:30:35Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-13T17:30:00Z",
-   "stop": 56.132969640263816,
-   "stop_order_id": "46343917-3cfa-46e5-898d-fcfbe9cc078f",
-   "z": -3.49
+   "ret": 0.017976757508525454,
+   "pnl": 17.62998600000003
   },
   {
    "sym": "GOOG",
-   "qty": 3,
-   "entry": 292.27,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-13T15:30:35Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-13T17:30:00Z",
-   "stop": 288.2227981027987,
-   "stop_order_id": "b5a39814-e777-4e69-931b-fc65ec9666be",
-   "z": -3.42
+   "ret": -0.0008781845553768042,
+   "pnl": -0.7700009999999793
   }
  ],
- "closed": [],
  "halted": false,
  "summary_written": false
 }
