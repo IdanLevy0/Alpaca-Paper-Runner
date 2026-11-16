@@ -180,3 +180,26 @@ def test_dry_mode_never_touches_live_state(tmp_path, monkeypatch):
         L.main()
     assert calls and L.STATE_FILE.endswith("dry_state.json")
     assert json.loads(live_file.read_text()) == {"last_rebalance": None, "sleeves": {}}
+
+
+def test_resized_slice_tops_up_same_day():
+    p = fake_panel(seed=4)
+    k = 400
+    fc = FakeClient(p, k)
+    st = L.load_state()
+    small = dict(SLEEVE)                       # 5% learning slice
+    L.step(fc, at(p, k), st, live=False, sleeves=[small])
+    key = "E001:trend_sma200_month"
+    before = sum(q * fc.latest_prices([s])[s] for s, q in st["sleeves"][key]["shares"].items())
+    big = dict(SLEEVE, pct=0.30)
+    notes = L.step(fc, at(p, k, 11, 0), st, live=False, sleeves=[big])       # same day, new size
+    after = sum(q * fc.latest_prices([s])[s] for s, q in st["sleeves"][key]["shares"].items())
+    assert any("slice resized" in n for n in notes) and after == pytest.approx(before * 6, rel=0.01)
+    assert L.step(fc, at(p, k, 11, 30), st, live=False, sleeves=[big]) == []   # and only once
+
+
+def test_existing_sleeve_without_record_is_resized():
+    sl = dict(SLEEVE, pct=0.30)
+    assert L.resized(sl, {"shares": {"SPY": 1.0}, "invested": 100.0})
+    assert not L.resized(sl, {"shares": {}, "invested": 0.0, "slice_pct": 0.30})
+    assert not L.resized(sl, {})

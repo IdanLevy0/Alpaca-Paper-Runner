@@ -38,7 +38,15 @@ def strategy_for(card, name):
 
 
 def slice_pct(sl):
+    if "pct" in sl:                                       # fixed slice chosen by Idan
+        return sl["pct"]
     return C.BUDGET[sl["stage"]] * min(1.0, C.VOL_TARGET / max(sl["vol"], 1e-9))
+
+
+def resized(sl, mine):
+    """True when the sleeve's slice size changed since it last traded (then it re-sizes at once)."""
+    old = mine.get("slice_pct", C.BUDGET[sl["stage"]] * min(1.0, C.VOL_TARGET / max(sl["vol"], 1e-9)))   # pre-2026-11-16
+    return bool(mine) and abs(old - slice_pct(sl)) > 1e-9
 
 
 def load_state():
@@ -106,7 +114,10 @@ def step(client, now, st, live, sleeves=None):
     clock = client.clock()
     if not clock.get("is_open"):
         return ["market closed"]
-    if (et.hour, et.minute) < C.REBALANCE_AFTER_ET or st.get("last_rebalance") == today:
+    if (et.hour, et.minute) < C.REBALANCE_AFTER_ET:
+        return []
+    if st.get("last_rebalance") == today and not any(
+            resized(sl, st["sleeves"].get(f"{sl['card']}:{sl['variant']}", {})) for sl in sleeves):
         return []
     syms = sorted({s for sl in sleeves for s in sl["universe"]})
     start = (et.date() - timedelta(days=HISTORY_DAYS)).isoformat()
@@ -122,8 +133,10 @@ def step(client, now, st, live, sleeves=None):
         mine = st["sleeves"].setdefault(key, {"shares": {}, "invested": 0.0})
         w, rebalance_day = targets(panel, sl)
         first = not mine["shares"] and mine["invested"] == 0.0
-        if not (rebalance_day or first):
+        size_changed = resized(sl, mine) and not first
+        if not (rebalance_day or first or size_changed):
             continue
+        mine["slice_pct"] = slice_pct(sl)
         budget = equity * slice_pct(sl)
         for s in sorted(set(w) | set(mine["shares"])):
             px = prices.get(s)
@@ -134,7 +147,8 @@ def step(client, now, st, live, sleeves=None):
             diff = w.get(s, 0.0) * budget - have
             if abs(diff) >= C.MIN_ORDER_USD:
                 plan.append((key, s, diff, px))
-        notes.append(f"{key}: rebalance ({'first day' if first else 'rule day'}), {len(w)} holdings")
+        why = "first day" if first else "slice resized" if size_changed else "rule day"
+        notes.append(f"{key}: rebalance ({why}), {len(w)} holdings")
     for key, s, diff, px in sorted(plan, key=lambda p: p[2]):          # sells first
         mine = st["sleeves"][key]
         coid = f"{C.ORDER_PREFIX}{key.split(':')[0]}-{s}-{today}-{'s' if diff < 0 else 'b'}"
@@ -182,6 +196,7 @@ def step_crypto(client, now, st, live, sleeves):
         key = f"{sl['card']}:{sl['variant']}"
         mine = st["sleeves"].setdefault(key, {"shares": {}, "invested": 0.0})
         w, _ = targets(panel, sl)
+        mine["slice_pct"] = slice_pct(sl)
         diff = w.get(sym, 0.0) * equity * slice_pct(sl) - mine["shares"].get(sym, 0.0) * px
         if abs(diff) < C.MIN_ORDER_USD:
             continue
