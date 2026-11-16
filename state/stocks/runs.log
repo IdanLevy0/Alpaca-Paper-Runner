@@ -393,3 +393,4 @@
 2026-11-16T17:15:29Z PAPER reversal_z3_h24: 5 open, watching
 2026-11-16T17:20:40Z PAPER reversal_z3_h24: 5 open, watching
 2026-11-16T17:25:25Z PAPER reversal_z3_h24: 5 open, watching
+2026-11-16T17:30:26Z PAPER ERROR HTTPError: 403 Client Error: Forbidden for url: https://paper-api.alpaca.markets/v2/orders

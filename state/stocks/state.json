@@ -408,19 +408,6 @@
  ],
  "positions": [
   {
-   "sym": "BIDU",
-   "qty": 13,
-   "entry": 75.59,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-16T15:30:22Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-16T17:30:00Z",
-   "stop": 74.38226382923851,
-   "stop_order_id": "69fc368b-b450-446b-8845-a8f9264d2815",
-   "z": -3.82
-  },
-  {
    "sym": "NFLX",
    "qty": 16,
    "entry": 61.519375,
@@ -473,7 +460,28 @@
    "z": -3.24
   }
  ],
- "closed": [],
+ "closed": [
+  {
+   "sym": "BIDU",
+   "ret": -0.008069850509326626,
+   "pnl": -7.929999999999993
+  }
+ ],
  "halted": false,
- "summary_written": false
+ "summary_written": false,
+ "_closed_this_pass": [
+  {
+   "sym": "BIDU",
+   "qty": 13,
+   "entry": 75.59,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-16T15:30:22Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-16T17:30:00Z",
+   "stop": 74.38226382923851,
+   "stop_order_id": "69fc368b-b450-446b-8845-a8f9264d2815",
+   "z": -3.82
+  }
+ ]
 }
