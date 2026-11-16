@@ -394,3 +394,4 @@
 2026-11-16T17:20:40Z PAPER reversal_z3_h24: 5 open, watching
 2026-11-16T17:25:25Z PAPER reversal_z3_h24: 5 open, watching
 2026-11-16T17:30:26Z PAPER ERROR HTTPError: 403 Client Error: Forbidden for url: https://paper-api.alpaca.markets/v2/orders
+2026-11-16T17:35:35Z PAPER reversal_z3_h24: EXIT NFLX time @ 61.30 (-0.35%); EXIT GOOGL time @ 286.82 (+0.00%); EXIT GOOG time @ 283.96 (+0.04%); EXIT META time @ 626.42 (+0.60%); 12:30 decision: no stock past the trigger (closest: AMZN z=-1.42, needs <= -3)
