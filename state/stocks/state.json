@@ -408,19 +408,6 @@
  ],
  "positions": [
   {
-   "sym": "CRM",
-   "qty": 20,
-   "entry": 197.18,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-17T15:30:28Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-17T17:30:00Z",
-   "stop": 194.00184981047903,
-   "stop_order_id": "5bc1b0cc-d38a-41ca-8ac6-4e546ad8d14f",
-   "z": -6.45
-  },
-  {
    "sym": "ADBE",
    "qty": 16,
    "entry": 237.13,
@@ -470,6 +457,11 @@
    "sym": "NKE",
    "ret": -0.013198124029634273,
    "pnl": -52.20993000000021
+  },
+  {
+   "sym": "CRM",
+   "ret": -0.016634547114311782,
+   "pnl": -65.60000000000002
   }
  ],
  "halted": false,
