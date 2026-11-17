@@ -403,7 +403,8 @@
   ]
  },
  "done_slots": [
-  11
+  11,
+  23
  ],
  "positions": [
   {
@@ -431,6 +432,32 @@
    "stop": 233.490130483985,
    "stop_order_id": "19e3bf28-d9d4-4d42-92b0-8cf4c2f54136",
    "z": -3.43
+  },
+  {
+   "sym": "DIS",
+   "qty": 33,
+   "entry": 119.5,
+   "entry_slot": 24,
+   "exit_slot": 48,
+   "entry_time": "2026-11-17T16:30:25Z",
+   "decision_time": "11:30",
+   "exit_at": "2026-11-17T18:30:00Z",
+   "stop": 118.45094887684249,
+   "stop_order_id": "a3d40d54-5bf7-4da4-ac2e-c5143ccf9fbb",
+   "z": -4.16
+  },
+  {
+   "sym": "NKE",
+   "qty": 103,
+   "entry": 38.279903,
+   "entry_slot": 24,
+   "exit_slot": 48,
+   "entry_time": "2026-11-17T16:30:25Z",
+   "decision_time": "11:30",
+   "exit_at": "2026-11-17T18:30:00Z",
+   "stop": 37.78269416186156,
+   "stop_order_id": "8e1a2368-96d5-4188-8518-ad8a33b69e3a",
+   "z": -3.77
   }
  ],
  "closed": [
