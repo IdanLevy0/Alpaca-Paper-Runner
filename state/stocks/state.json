@@ -444,22 +444,15 @@
    "stop": 38.65819977258147,
    "stop_order_id": "4b751368-5566-4657-b8c5-ff6fe44bc98d",
    "z": -3.3
-  },
-  {
-   "sym": "IBM",
-   "qty": 16,
-   "entry": 235.75,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-17T15:30:28Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-17T17:30:00Z",
-   "stop": 232.95302002741496,
-   "stop_order_id": "edfc65a0-ef2b-4133-97e6-4d76590bcd84",
-   "z": -3.3
   }
  ],
- "closed": [],
+ "closed": [
+  {
+   "sym": "IBM",
+   "ret": -0.012428419936373336,
+   "pnl": -46.88000000000011
+  }
+ ],
  "halted": false,
  "summary_written": false
 }
