@@ -404,22 +404,10 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
  "positions": [
-  {
-   "sym": "ADBE",
-   "qty": 16,
-   "entry": 237.13,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-17T15:30:28Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-17T17:30:00Z",
-   "stop": 233.490130483985,
-   "stop_order_id": "19e3bf28-d9d4-4d42-92b0-8cf4c2f54136",
-   "z": -3.43
-  },
   {
    "sym": "DIS",
    "qty": 33,
@@ -432,6 +420,19 @@
    "stop": 118.45094887684249,
    "stop_order_id": "a3d40d54-5bf7-4da4-ac2e-c5143ccf9fbb",
    "z": -4.16
+  },
+  {
+   "sym": "NKE",
+   "qty": 106,
+   "entry": 37.46,
+   "entry_slot": 36,
+   "exit_slot": 60,
+   "entry_time": "2026-11-17T17:30:25Z",
+   "decision_time": "12:30",
+   "exit_at": "2026-11-17T19:30:00Z",
+   "stop": 36.97344069297496,
+   "stop_order_id": "192f276c-4da8-4903-9e9c-c5f2393064a6",
+   "z": -3.28
   }
  ],
  "closed": [
@@ -454,6 +455,11 @@
    "sym": "NKE",
    "ret": -0.013109881704768012,
    "pnl": -51.690034999999575
+  },
+  {
+   "sym": "ADBE",
+   "ret": -0.0012651288322860221,
+   "pnl": -4.799999999999727
   }
  ],
  "halted": false,
