@@ -402,8 +402,63 @@
    0.005759157205208254
   ]
  },
- "done_slots": [],
- "positions": [],
+ "done_slots": [
+  11
+ ],
+ "positions": [
+  {
+   "sym": "CRM",
+   "qty": 20,
+   "entry": 197.18,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-17T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-17T17:30:00Z",
+   "stop": 194.00184981047903,
+   "stop_order_id": "5bc1b0cc-d38a-41ca-8ac6-4e546ad8d14f",
+   "z": -6.45
+  },
+  {
+   "sym": "ADBE",
+   "qty": 16,
+   "entry": 237.13,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-17T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-17T17:30:00Z",
+   "stop": 233.490130483985,
+   "stop_order_id": "19e3bf28-d9d4-4d42-92b0-8cf4c2f54136",
+   "z": -3.43
+  },
+  {
+   "sym": "NKE",
+   "qty": 101,
+   "entry": 39.16693,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-17T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-17T17:30:00Z",
+   "stop": 38.65819977258147,
+   "stop_order_id": "4b751368-5566-4657-b8c5-ff6fe44bc98d",
+   "z": -3.3
+  },
+  {
+   "sym": "IBM",
+   "qty": 16,
+   "entry": 235.75,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-17T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-17T17:30:00Z",
+   "stop": 232.95302002741496,
+   "stop_order_id": "edfc65a0-ef2b-4133-97e6-4d76590bcd84",
+   "z": -3.3
+  }
+ ],
  "closed": [],
  "halted": false,
  "summary_written": false
