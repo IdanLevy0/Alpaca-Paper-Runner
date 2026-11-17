@@ -408,21 +408,7 @@
   35,
   47
  ],
- "positions": [
-  {
-   "sym": "NKE",
-   "qty": 106,
-   "entry": 37.46,
-   "entry_slot": 36,
-   "exit_slot": 60,
-   "entry_time": "2026-11-17T17:30:25Z",
-   "decision_time": "12:30",
-   "exit_at": "2026-11-17T19:30:00Z",
-   "stop": 36.97344069297496,
-   "stop_order_id": "192f276c-4da8-4903-9e9c-c5f2393064a6",
-   "z": -3.28
-  }
- ],
+ "positions": [],
  "closed": [
   {
    "sym": "IBM",
@@ -453,6 +439,11 @@
    "sym": "DIS",
    "ret": -0.005188284518828468,
    "pnl": -20.46000000000015
+  },
+  {
+   "sym": "NKE",
+   "ret": -0.013347570742124892,
+   "pnl": -53.0
   }
  ],
  "halted": false,
