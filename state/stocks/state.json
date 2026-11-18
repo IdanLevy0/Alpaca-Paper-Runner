@@ -403,7 +403,8 @@
   ]
  },
  "done_slots": [
-  11
+  11,
+  23
  ],
  "positions": [
   {
@@ -444,6 +445,19 @@
    "stop": 547.2661053116236,
    "stop_order_id": "e6d3bdb0-fdc4-4331-8d52-a482b6b5f2e3",
    "z": -3.12
+  },
+  {
+   "sym": "UNH",
+   "qty": 10,
+   "entry": 362.577,
+   "entry_slot": 24,
+   "exit_slot": 48,
+   "entry_time": "2026-11-18T16:30:27Z",
+   "decision_time": "11:30",
+   "exit_at": "2026-11-18T18:30:00Z",
+   "stop": 358.0182226135779,
+   "stop_order_id": "bc8eda60-260d-49f3-b829-2442cec176bf",
+   "z": -3.4
   }
  ],
  "closed": [
