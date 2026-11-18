@@ -404,21 +404,22 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
  "positions": [
   {
-   "sym": "CAT",
-   "qty": 7,
-   "entry": 558.25,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-18T15:30:41Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-18T17:30:00Z",
-   "stop": 547.2661053116236,
-   "stop_order_id": "e6d3bdb0-fdc4-4331-8d52-a482b6b5f2e3",
-   "z": -3.12
+   "sym": "UNH",
+   "qty": 11,
+   "entry": 355.21,
+   "entry_slot": 36,
+   "exit_slot": 60,
+   "entry_time": "2026-11-18T17:30:43Z",
+   "decision_time": "12:30",
+   "exit_at": "2026-11-18T19:30:00Z",
+   "stop": 350.74384987070056,
+   "stop_order_id": "6a675e06-65fb-4a09-8e75-12b448a9070e",
+   "z": -3.48
   }
  ],
  "closed": [
@@ -441,6 +442,11 @@
    "sym": "UNH",
    "ret": -0.012689718321901244,
    "pnl": -46.00999999999999
+  },
+  {
+   "sym": "CAT",
+   "ret": 0.008150470219435713,
+   "pnl": 31.84999999999968
   }
  ],
  "halted": false,
