@@ -1,4 +1,3 @@
-2026-11-16T09:10:22Z PAPER ERROR ConnectTimeout: HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/positions/BTCUSD (Caused by ConnectTimeoutError(<HTTPSConnection(host='paper-api.alpaca.markets', port=443) at 0x7f126d9d1e80>, 'Connection to paper-api.alpaca.markets timed out. (connect timeout=20)')
 2026-11-16T09:15:15Z PAPER breakout_trend: flat, bar 2026-11-16T04:00:00Z already checked
 2026-11-16T09:20:25Z PAPER breakout_trend: flat, bar 2026-11-16T04:00:00Z already checked
 2026-11-16T09:25:18Z PAPER breakout_trend: flat, bar 2026-11-16T04:00:00Z already checked
@@ -498,3 +497,4 @@
 2026-11-18T02:10:27Z PAPER breakout_trend: flat, bar 2026-11-17T20:00:00Z already checked
 2026-11-18T02:15:28Z PAPER breakout_trend: flat, bar 2026-11-17T20:00:00Z already checked
 2026-11-18T02:20:14Z PAPER breakout_trend: flat, bar 2026-11-17T20:00:00Z already checked
+2026-11-18T02:25:24Z PAPER breakout_trend: flat, bar 2026-11-17T20:00:00Z already checked
