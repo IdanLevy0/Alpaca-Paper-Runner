@@ -457,5 +457,6 @@
   }
  ],
  "halted": false,
- "summary_written": false
+ "summary_written": false,
+ "_closed_this_pass": []
 }
