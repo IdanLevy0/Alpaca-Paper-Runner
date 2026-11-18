@@ -406,9 +406,24 @@
   11,
   23,
   35,
-  47
+  47,
+  59
  ],
- "positions": [],
+ "positions": [
+  {
+   "sym": "UNH",
+   "qty": 11,
+   "entry": 346.66,
+   "entry_slot": 60,
+   "exit_slot": 77,
+   "entry_time": "2026-11-18T19:30:28Z",
+   "decision_time": "14:30",
+   "exit_at": "2026-11-18T20:55:00Z",
+   "stop": 342.3013513025452,
+   "stop_order_id": "54663c67-1130-44b2-a560-31c0f1fc7a8c",
+   "z": -4.19
+  }
+ ],
  "closed": [
   {
    "sym": "UNH",
