@@ -407,19 +407,6 @@
  ],
  "positions": [
   {
-   "sym": "UNH",
-   "qty": 10,
-   "entry": 371.21,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-18T15:30:41Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-18T17:30:00Z",
-   "stop": 366.54267760058207,
-   "stop_order_id": "9796000b-76ed-4e41-b1c6-c6bd872625df",
-   "z": -6.62
-  },
-  {
    "sym": "CVX",
    "qty": 18,
    "entry": 208.502777,
@@ -459,7 +446,13 @@
    "z": -3.12
   }
  ],
- "closed": [],
+ "closed": [
+  {
+   "sym": "UNH",
+   "ret": -0.013146197570108598,
+   "pnl": -48.799999999999955
+  }
+ ],
  "halted": false,
  "summary_written": false
 }
