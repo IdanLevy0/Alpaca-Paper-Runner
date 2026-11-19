@@ -598,3 +598,4 @@
 2026-11-18T20:55:25Z PAPER ERROR HTTPError: 403 Client Error: Forbidden for url: https://paper-api.alpaca.markets/v2/orders
 2026-11-18T21:00:45Z PAPER reversal_z3_h24: WARNING market closed with 1 open position(s) in state
 2026-11-18T21:05:29Z PAPER reversal_z3_h24: WARNING market closed with 1 open position(s) in state
+2026-11-19T14:30:27Z PAPER reversal_z3_h24: WARNING 1 position(s) left from 2026-11-18; dropping from state; new day: features for 100/100 stocks
