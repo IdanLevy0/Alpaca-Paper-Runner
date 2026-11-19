@@ -646,3 +646,4 @@
 2026-11-19T18:15:23Z PAPER reversal_z3_h24: 0 open, watching
 2026-11-19T18:20:22Z PAPER reversal_z3_h24: 0 open, watching
 2026-11-19T18:25:34Z PAPER reversal_z3_h24: 0 open, watching
+2026-11-19T18:30:25Z PAPER reversal_z3_h24: 13:30 decision: no stock past the trigger (closest: GOOG z=-2.38, needs <= -3)
