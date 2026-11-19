@@ -402,8 +402,76 @@
    0.005571653358646772
   ]
  },
- "done_slots": [],
- "positions": [],
+ "done_slots": [
+  11
+ ],
+ "positions": [
+  {
+   "sym": "UNH",
+   "qty": 11,
+   "entry": 336.17,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-19T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-19T17:30:00Z",
+   "stop": 330.65769972211893,
+   "stop_order_id": "abec455a-1205-43a4-b052-6177e3d5f475",
+   "z": -6.17
+  },
+  {
+   "sym": "PM",
+   "qty": 21,
+   "entry": 185.24,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-19T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-19T17:30:00Z",
+   "stop": 183.07339823187758,
+   "stop_order_id": "50a37737-075c-483c-b7b2-9957e28b752d",
+   "z": -4.32
+  },
+  {
+   "sym": "MO",
+   "qty": 52,
+   "entry": 73.75,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-19T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-19T17:30:00Z",
+   "stop": 73.03909449198729,
+   "stop_order_id": "c4bea0bd-ad41-468c-bc03-b65cc90f8361",
+   "z": -4.25
+  },
+  {
+   "sym": "ACN",
+   "qty": 17,
+   "entry": 219.88,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-19T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-19T17:30:00Z",
+   "stop": 215.65540128960708,
+   "stop_order_id": "7af1be34-ea23-4c02-8b4e-45e0ac8012a0",
+   "z": -3.86
+  },
+  {
+   "sym": "KR",
+   "qty": 58,
+   "entry": 67.16,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-19T15:30:28Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-19T17:30:00Z",
+   "stop": 66.34420133075295,
+   "stop_order_id": "2964f02e-ff2a-4d5e-ba26-cedfac74f954",
+   "z": -3.39
+  }
+ ],
  "closed": [],
  "halted": false,
  "summary_written": false
