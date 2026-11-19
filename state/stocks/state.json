@@ -407,19 +407,6 @@
  ],
  "positions": [
   {
-   "sym": "UNH",
-   "qty": 11,
-   "entry": 336.17,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-19T15:30:28Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-19T17:30:00Z",
-   "stop": 330.65769972211893,
-   "stop_order_id": "abec455a-1205-43a4-b052-6177e3d5f475",
-   "z": -6.17
-  },
-  {
    "sym": "PM",
    "qty": 21,
    "entry": 185.24,
@@ -472,7 +459,13 @@
    "z": -3.39
   }
  ],
- "closed": [],
+ "closed": [
+  {
+   "sym": "UNH",
+   "ret": -0.016655534402237104,
+   "pnl": -61.590001000000484
+  }
+ ],
  "halted": false,
  "summary_written": false
 }
