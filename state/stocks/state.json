@@ -402,8 +402,24 @@
    0.005255184964097198
   ]
  },
- "done_slots": [],
- "positions": [],
+ "done_slots": [
+  11
+ ],
+ "positions": [
+  {
+   "sym": "AVGO",
+   "qty": 12,
+   "entry": 320.79,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-20T15:30:25Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-20T17:30:00Z",
+   "stop": 313.5581189323237,
+   "stop_order_id": "92834514-8c93-47b0-940f-be5cee9c7c8c",
+   "z": -5.65
+  }
+ ],
  "closed": [],
  "halted": false,
  "summary_written": false
