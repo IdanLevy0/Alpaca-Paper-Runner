@@ -1,4 +1,3 @@
-2026-11-18T06:55:15Z PAPER breakout_trend: flat, bar 2026-11-18T00:00:00Z already checked
 2026-11-18T07:00:19Z PAPER breakout_trend: flat, bar 2026-11-18T00:00:00Z already checked
 2026-11-18T07:05:28Z PAPER breakout_trend: flat, bar 2026-11-18T00:00:00Z already checked
 2026-11-18T07:10:25Z PAPER breakout_trend: flat, bar 2026-11-18T00:00:00Z already checked
@@ -498,3 +497,4 @@
 2026-11-19T23:55:17Z PAPER breakout_trend: flat, bar 2026-11-19T16:00:00Z already checked
 2026-11-20T00:00:31Z PAPER breakout_trend: flat, no signal on 2026-11-19T20:00:00Z | close 61,911 | 20-bar high 65,614 (needs +6.0%) | above SMA200 75,734: no, 22.3% below
 2026-11-20T00:05:15Z PAPER breakout_trend: flat, bar 2026-11-19T20:00:00Z already checked
+2026-11-20T00:10:21Z PAPER breakout_trend: flat, bar 2026-11-19T20:00:00Z already checked
