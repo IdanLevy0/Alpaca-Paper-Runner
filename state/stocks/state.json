@@ -402,8 +402,24 @@
    0.0051081774072574
   ]
  },
- "done_slots": [],
- "positions": [],
+ "done_slots": [
+  11
+ ],
+ "positions": [
+  {
+   "sym": "LYB",
+   "qty": 71,
+   "entry": 54.856901,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-23T15:30:27Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-23T17:30:00Z",
+   "stop": 53.94433035346957,
+   "stop_order_id": "e26c7681-4395-472b-a9c9-55ec819cfbb6",
+   "z": -3.69
+  }
+ ],
  "closed": [],
  "halted": false,
  "summary_written": false
