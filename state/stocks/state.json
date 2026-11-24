@@ -402,8 +402,24 @@
    0.005154556480715672
   ]
  },
- "done_slots": [],
- "positions": [],
+ "done_slots": [
+  11
+ ],
+ "positions": [
+  {
+   "sym": "TXN",
+   "qty": 14,
+   "entry": 264.878571,
+   "entry_slot": 12,
+   "exit_slot": 36,
+   "entry_time": "2026-11-24T15:30:40Z",
+   "decision_time": "10:30",
+   "exit_at": "2026-11-24T17:30:00Z",
+   "stop": 259.5169285179762,
+   "stop_order_id": "5d75a55f-cdcd-43f7-ae7e-a8ce191f4f3b",
+   "z": -4.63
+  }
+ ],
  "closed": [],
  "halted": false,
  "summary_written": false
