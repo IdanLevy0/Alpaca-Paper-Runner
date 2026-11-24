@@ -405,9 +405,24 @@
  "done_slots": [
   11,
   23,
-  35
+  35,
+  47
  ],
- "positions": [],
+ "positions": [
+  {
+   "sym": "MDT",
+   "qty": 40,
+   "entry": 96.34125,
+   "entry_slot": 48,
+   "exit_slot": 72,
+   "entry_time": "2026-11-24T18:30:40Z",
+   "decision_time": "13:30",
+   "exit_at": "2026-11-24T20:30:00Z",
+   "stop": 95.2039201065661,
+   "stop_order_id": "47447aba-da2a-4001-a84d-3bb116acab07",
+   "z": -3.01
+  }
+ ],
  "closed": [
   {
    "sym": "TXN",
