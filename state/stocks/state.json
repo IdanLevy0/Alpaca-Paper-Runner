@@ -404,37 +404,22 @@
  },
  "done_slots": [
   11,
-  23
+  23,
+  35
  ],
- "positions": [
+ "positions": [],
+ "closed": [
   {
    "sym": "BIIB",
-   "qty": 15,
-   "entry": 258.446,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-25T15:30:36Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-25T17:30:00Z",
-   "stop": 253.81093631701822,
-   "stop_order_id": "c2bc174e-5bc7-4614-85c7-1a7b40fccc34",
-   "z": -4.65
+   "ret": 0.006902795941898798,
+   "pnl": 26.759999999999877
   },
   {
    "sym": "AAPL",
-   "qty": 11,
-   "entry": 346.83,
-   "entry_slot": 12,
-   "exit_slot": 36,
-   "entry_time": "2026-11-25T15:30:36Z",
-   "decision_time": "10:30",
-   "exit_at": "2026-11-25T17:30:00Z",
-   "stop": 342.8426232609764,
-   "stop_order_id": "84d9b2c9-0cb2-410e-a2b2-bf04cbe63a93",
-   "z": -3.3
+   "ret": 0.01265749790963877,
+   "pnl": 48.290000000000475
   }
  ],
- "closed": [],
  "halted": false,
  "summary_written": false
 }
