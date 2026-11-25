@@ -10,3 +10,4 @@ date,trades,wins,avg_ret_pct,pnl_usd,strategy
 2026-11-20,1,0,-2.301,-88.56,reversal_z3_h24
 2026-11-23,1,0,-0.669,-26.05,reversal_z3_h24
 2026-11-24,2,2,0.16,12.17,reversal_z3_h24
+2026-11-25,2,2,0.978,75.05,reversal_z3_h24
