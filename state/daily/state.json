@@ -1,11 +1,11 @@
 {
- "last_crypto_rebalance": "2026-11-27",
+ "last_crypto_rebalance": "2026-11-28",
  "last_rebalance": "2026-11-27",
  "sleeves": {
   "B003:btc_tom_m4_p2": {
-   "invested": 9629.81,
+   "invested": 9970.94,
    "shares": {
-    "BTC/USD": 0.158922715
+    "BTC/USD": 0.164612808
    },
    "slice_pct": 0.1
   },
